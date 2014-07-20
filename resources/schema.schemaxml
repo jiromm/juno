@@ -1,0 +1,112 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemadesigner version="6.5">
+<source>
+<database charset="utf8" collation="utf8_general_ci">juno</database>
+</source>
+<canvas zoom="100">
+<tables>
+<table name="user" view="colnames">
+<left>251</left>
+<top>26</top>
+<width>121</width>
+<height>205</height>
+<sql_create_table>CREATE TABLE `user` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) unsigned NOT NULL,
+  `login` varchar(64) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `name` varchar(256) DEFAULT NULL,
+  `email` varchar(256) DEFAULT NULL,
+  `is_active` tinyint(4) unsigned NOT NULL DEFAULT '1',
+  `is_primary` tinyint(4) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `user_company_id` (`company_id`),
+  CONSTRAINT `user_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="permission" view="colnames">
+<left>247</left>
+<top>257</top>
+<width>121</width>
+<height>124</height>
+<sql_create_table>CREATE TABLE `permission` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(256) NOT NULL,
+  `description` varchar(512) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="rel_user_permission" view="colnames">
+<left>56</left>
+<top>125</top>
+<width>125</width>
+<height>124</height>
+<sql_create_table>CREATE TABLE `rel_user_permission` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `user_id` int(11) unsigned NOT NULL,
+  `permission_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rel_user_permission_user_id` (`user_id`),
+  KEY `rel_user_permission_permission_id` (`permission_id`),
+  CONSTRAINT `rel_user_permission_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
+  CONSTRAINT `rel_user_permission_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="company" view="colnames">
+<left>502</left>
+<top>108</top>
+<width>119</width>
+<height>141</height>
+<sql_create_table>CREATE TABLE `company` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `plan_id` int(11) unsigned NOT NULL,
+  `name` varchar(64) DEFAULT NULL,
+  `status` tinyint(1) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`),
+  KEY `company_plan_id` (`plan_id`),
+  CONSTRAINT `company_plan_id` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="feature" view="colnames">
+<left>700</left>
+<top>371</top>
+<width>116</width>
+<height>124</height>
+<sql_create_table>CREATE TABLE `feature` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `description` varchar(512) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="rel_company_feature" view="colnames">
+<left>861</left>
+<top>42</top>
+<width>115</width>
+<height>124</height>
+<sql_create_table>CREATE TABLE `rel_company_feature` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) unsigned NOT NULL,
+  `feature_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rel_company_feature_company_id` (`company_id`),
+  KEY `rel_company_feature_feature_id` (`feature_id`),
+  CONSTRAINT `rel_company_feature_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`),
+  CONSTRAINT `rel_company_feature_feature_id` FOREIGN KEY (`feature_id`) REFERENCES `feature` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="plan" view="colnames">
+<left>698</left>
+<top>192</top>
+<width>108</width>
+<height>124</height>
+<sql_create_table>CREATE TABLE `plan` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(64) DEFAULT NULL,
+  `description` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+</tables>
+</canvas>
+</schemadesigner>

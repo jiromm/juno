@@ -1,0 +1,122 @@
+body {
+    padding-top: 60px;
+    padding-bottom: 40px;
+}
+
+.navbar-brand a {
+	color: #ffdf0c !important;
+	text-decoration: none !important;
+}
+.null {
+	margin: 0;
+	padding: 0;
+}
+
+/**
+ * Forms
+ */
+.element-required {
+	font-weight: bold;
+	color: #d2322d;
+}
+
+/**
+ * Form Signin
+ */
+.form-signin {
+	max-width: 330px;
+	padding: 15px;
+	margin: 0 auto;
+}
+.form-signin .form-signin-heading,
+.form-signin .checkbox {
+	margin-bottom: 10px;
+}
+.form-signin .checkbox {
+	font-weight: normal;
+}
+.form-signin .form-control {
+	position: relative;
+	font-size: 16px;
+	height: auto;
+	padding: 10px;
+	-webkit-box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	box-sizing: border-box;
+}
+.form-signin .form-control:focus {
+	z-index: 2;
+}
+.form-signin input[type="text"] {
+	margin-bottom: -1px;
+	border-bottom-left-radius: 0;
+	border-bottom-right-radius: 0;
+}
+.form-signin input[type="password"] {
+	margin-bottom: 10px;
+	border-top-left-radius: 0;
+	border-top-right-radius: 0;
+}
+
+div.dataTables_scroll,
+div.dataTables_scroll *,
+div.dataTables_scroll *:before,
+div.dataTables_scroll *:after {
+	-moz-box-sizing: content-box;
+	box-sizing: content-box;
+}
+
+.tags-autocomplete-positioning {
+	position: relative;
+	top: -7px;
+}
+
+.status-indicator {
+	padding: 4px;
+	line-height: 0;
+	font-size: 0;
+	vertical-align: super;
+	margin: 0 5px 0 15px;
+	border-radius: 50%;
+}
+.status-indicator:first-child {
+	margin-left: 0;
+}
+.status-indicator-success {
+	background-color: #5cb85c;
+}
+.status-indicator-warning {
+	background-color: #f0ad4e;
+}
+.status-indicator-danger {
+	background-color: #d9534f;
+}
+
+/** Dashboard */
+.widget {
+	font-size: 650%;
+	line-height: 80%;
+}
+.widget small {
+	color: #888;
+	font-stretch: expanded;
+	font-size: 30%;
+	display: block;
+	line-height: 80%;
+}
+.widget .widget-additional {
+	font-size: 60%;
+}
+
+.purple {
+	background-color: purple !important;
+	width: 100%;
+}
+.orange {
+	background-color: orange !important;
+}
+.fence-preview {
+	margin: -9px 0 -7px 0;
+	height: 30px;
+}
+

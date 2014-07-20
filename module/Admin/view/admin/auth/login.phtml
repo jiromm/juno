@@ -1,0 +1,24 @@
+<?php
+
+if (!$this->loginSuccess) {
+	if ($this->loginError) {
+		echo '<div class="alert alert-danger">The credentials provided are invalid.</div>';
+	}
+
+	$this->form->prepare();
+
+?>
+
+<?php echo $this->form()->openTag($this->form); ?>
+<h2 class="form-signin-heading">Please sign in</h2>
+<?php echo $this->formInput($this->form->get('login')); ?>
+<?php echo $this->formInput($this->form->get('password')); ?>
+<?php echo $this->formSubmit($this->form->get('submit')); ?>
+<?php echo $this->form()->closeTag(); ?>
+
+<?php
+
+}
+
+?>
+
