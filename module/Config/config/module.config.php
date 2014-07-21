@@ -58,10 +58,14 @@ return array(
 			'UserAdminMapper' => 'Config\Mapper\UserAdmin',
 
 			'ProductService' => 'Config\Service\Product',
+			'UserService' => 'Config\Service\User',
 		),
 		'factories' => array(
 			'Config\Service\Product' => function($sm) {
 				return new \Config\Service\Product($sm);
+			},
+			'Config\Service\User' => function($sm) {
+				return new \Config\Service\User($sm);
 			},
 			'Zend\Db\Adapter\Adapter' => function($sm) {
 				$config = $sm->get('Config');

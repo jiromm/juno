@@ -10,8 +10,10 @@ class User extends EntityBase {
 	protected $login;
 	protected $password;
 	protected $name;
+	protected $email;
 	protected $is_active;
 	protected $is_primary;
+	protected $is_removed;
 
 	public function setId($id) {
 		$this->id = $id;
@@ -53,12 +55,28 @@ class User extends EntityBase {
 		return $this->login;
 	}
 
+	public function setIsRemoved($is_removed) {
+		$this->is_removed = $is_removed;
+	}
+
+	public function getIsRemoved() {
+		return $this->is_removed;
+	}
+
 	public function setName($name) {
 		$this->name = $name;
 	}
 
 	public function getName() {
 		return $this->name;
+	}
+
+	public function setEmail($email) {
+		$this->email = $email;
+	}
+
+	public function getEmail() {
+		return $this->email;
 	}
 
 	public function setPassword($password) {

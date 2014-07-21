@@ -54,7 +54,7 @@
 				                <?php echo $this->ident()->name; ?> <span class="caret"></span>
 			                </a>
 			                <ul class="dropdown-menu" role="menu" aria-labelledby="profile-dropdown">
-				                <li><a role="menuitem" tabindex="-1" href="#">User Management</a></li>
+				                <li><a role="menuitem" tabindex="-1" href="<?php echo $this->url('user'); ?>">User Management</a></li>
 				                <li><a role="menuitem" tabindex="-1" href="#">Settings</a></li>
 				                <li class="divider"></li>
 				                <li><a href="<?php echo $this->url('logout') ?>">Logout</a></li>
@@ -66,12 +66,26 @@
             </div>
         </nav>
         <div class="container">
+	        <div class="row">
+		        <div class="col-xs-12">
+			        <ol class="breadcrumb">
+				        <li><a href="<?php echo $this->url('home'); ?>">Home</a></li>
+				        <?php echo $this->layout()->breadcrumb; ?>
+			        </ol>
+		        </div>
+		        <div class="col-xs-12">
+			        <ul class="list-inline pull-right">
+				        <?php echo $this->layout()->actions; ?>
+			        </ul>
+			        <h1 class="null"><?php echo $this->layout()->pageTitle; ?></h1>
+		        </div>
+	        </div>
             <?php echo $this->content; ?>
         </div>
         <div class="container">
 	        <hr>
 	        <footer>
-		        <p>&copy; <?php echo date('Y') ?> by <a href="mailto:aram.baghdasaryan@gmail.com">Aram Baghdasaryan</a>. All rights reserved.</p>
+		        <p>&copy; <?php echo date('Y') ?> by <a href="http://jiromm.com/" target="_blank">Aram Baghdasaryan</a>. All rights reserved.</p>
 	        </footer>
         </div>
 	        <?php echo $this->inlineScript()

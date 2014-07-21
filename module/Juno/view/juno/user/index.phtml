@@ -1,0 +1,51 @@
+<?php
+
+$this->layout()->breadcrumb = '<li class="active">User Management</li>';
+$this->layout()->actions = '<li><a href="' . $this->url('user/add') . '" class="btn btn-primary">Add New User</a></li>';
+$this->headTitle('User Management');
+$this->layout()->pageTitle = 'User Management';
+
+/**
+ * @var \Config\Entity\User[]|\ArrayObject $data
+ */
+$data = $this->data;
+
+?>
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-condensed table-striped table-hover">
+			<thead>
+				<tr>
+					<th>login</th>
+					<th>Name</th>
+					<th>Email</th>
+					<th></th>
+				</tr>
+			</thead>
+			<tbody>
+			<?php if ($this->data) { ?>
+				<?php foreach ($data as $item) { ?>
+				<tr>
+					<td><?php echo $item->getLogin(); ?></td>
+					<td><?php echo $item->getName(); ?></td>
+					<td><?php echo $item->getEmail(); ?></td>
+					<td class="text-right">
+						<div class="btn-group text-left">
+							<a href="<?php echo $this->url('user/edit', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Edit</a>
+							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+								<span class="caret"></span>
+								<span class="sr-only">Toggle Dropdown</span>
+							</button>
+							<ul class="dropdown-menu" role="menu">
+								<li><a href="<?php echo $this->url('user/suspend', ['id' => $item->getId()]); ?>">Suspend</a></li>
+								<li><a href="<?php echo $this->url('user/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
+							</ul>
+						</div>
+					</td>
+				</tr>
+				<?php } ?>
+			<?php } ?>
+			</tbody>
+		</table>
+	</div>
+</div>

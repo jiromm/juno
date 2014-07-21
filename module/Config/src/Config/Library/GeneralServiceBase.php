@@ -15,6 +15,6 @@ class GeneralServiceBase {
 	}
 
 	public function getServiceLocator() {
-		$this->sm;
+		return $this->sm;
 	}
 }

@@ -2,22 +2,21 @@
 
 namespace Juno\Controller;
 
-use Juno\Filter\HouseFilter;
-use Juno\Form\House;
-use Juno\Mapper\House as HouseMapper;
-use Juno\Entity\House as HouseEntity;
+use Config\Service\User as UserService;
+use Juno\Filter\UserFilter;
+use Juno\Form\User;
 use Zend\Debug\Debug;
 use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class HouseController extends AbstractActionController {
+class UserController extends AbstractActionController {
     public function indexAction() {
 	    /**
-	     * @var HouseMapper $mapper
+	     * @var UserService $service
 	     */
-	    $mapper = $this->getServiceLocator()->get('HouseMapper');
-	    $result = $mapper->fetchAll();
+	    $service = $this->getServiceLocator()->get('UserService');
+	    $result = $service->getAllActiveUsers();
 
 	    return new ViewModel([
 		    'data' => $result,
@@ -55,42 +54,6 @@ class HouseController extends AbstractActionController {
 				if (!is_dir($dir)) {
 					if (!mkdir($dir, 0755, true)) {
 						throw new \Exception('Cannot create directory: ' . $dir);
-					}
-				}
-
-				if ($_FILES['image']['name']) {
-					if (!$_FILES['image']['error']) {
-						$newFileName = $dir . '/big.jpeg';
-
-						if ($_FILES['image']['size'] > (1024000)) {
-							$error = 'Oops! Your file\'s size is to large.';
-						} else {
-							if (in_array(strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION)), ['jpg', 'jpeg'])) {
-								move_uploaded_file($_FILES['image']['tmp_name'], $newFileName);
-							} else {
-								$error = 'Ooops! JPEG please.';
-							}
-						}
-					} else {
-						$error = 'Ooops! Your upload triggered the following error: ' . $_FILES['image']['error'];
-					}
-				}
-
-				if ($_FILES['icon']['name']) {
-					if (!$_FILES['icon']['error']) {
-						$newFileName = $dir . '/icon.jpeg';
-
-						if ($_FILES['icon']['size'] > (1024000)) {
-							$error = 'Oops! Your file\'s size is to large.';
-						} else {
-							if (in_array(strtolower(pathinfo($_FILES['icon']['name'], PATHINFO_EXTENSION)), ['jpg', 'jpeg'])) {
-								move_uploaded_file($_FILES['icon']['tmp_name'], $newFileName);
-							} else {
-								$error = 'Ooops! JPEG please.';
-							}
-						}
-					} else {
-						$error = 'Ooops! Your upload triggered the following error: ' . $_FILES['icon']['error'];
 					}
 				}
 
@@ -135,42 +98,6 @@ class HouseController extends AbstractActionController {
 				if (!is_dir($dir)) {
 					if (!mkdir($dir, 777, true)) {
 						throw new \Exception('Cannot create directory: ' . $dir);
-					}
-				}
-
-				if ($_FILES['image']['name']) {
-					if (!$_FILES['image']['error']) {
-						$newFileName = $dir . '/big.jpeg';
-
-						if ($_FILES['image']['size'] > (1024000)) {
-							$error = 'Oops! Your file\'s size is to large.';
-						} else {
-							if (in_array(strtolower(pathinfo($_FILES['image']['name'], PATHINFO_EXTENSION)), ['jpg', 'jpeg'])) {
-								move_uploaded_file($_FILES['image']['tmp_name'], $newFileName);
-							} else {
-								$error = 'Ooops! JPEG please.';
-							}
-						}
-					} else {
-						$error = 'Ooops! Your upload triggered the following error: ' . $_FILES['image']['error'];
-					}
-				}
-
-				if ($_FILES['icon']['name']) {
-					if (!$_FILES['icon']['error']) {
-						$newFileName = $dir . '/icon.jpeg';
-
-						if ($_FILES['icon']['size'] > (1024000)) {
-							$error = 'Oops! Your file\'s size is to large.';
-						} else {
-							if (in_array(strtolower(pathinfo($_FILES['icon']['name'], PATHINFO_EXTENSION)), ['jpg', 'jpeg'])) {
-								move_uploaded_file($_FILES['icon']['tmp_name'], $newFileName);
-							} else {
-								$error = 'Ooops! JPEG please.';
-							}
-						}
-					} else {
-						$error = 'Ooops! Your upload triggered the following error: ' . $_FILES['icon']['error'];
 					}
 				}
 			} else {

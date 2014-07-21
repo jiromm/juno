@@ -16,6 +16,68 @@ return array(
                     ),
                 ),
             ),
+	        'user' => array(
+		        'type' => 'Literal',
+		        'options' => array(
+			        'route'    => '/user',
+			        'defaults' => array(
+				        'controller' => 'Juno\Controller\User',
+				        'action'     => 'index',
+			        ),
+		        ),
+		        'may_terminate' => true,
+		        'child_routes' => array(
+			        'add' => array(
+				        'type'    => 'Literal',
+				        'options' => array(
+					        'route'    => '/add',
+					        'defaults' => array(
+						        'controller' => 'Juno\Controller\Users',
+						        'action'     => 'add',
+					        ),
+				        ),
+			        ),
+			        'edit' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/edit/[:id]',
+					        'defaults' => array(
+						        'controller' => 'Juno\Controller\Users',
+						        'action'     => 'edit',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+			        'suspend' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/suspend/[:id]',
+					        'defaults' => array(
+						        'controller' => 'Juno\Controller\Users',
+						        'action'     => 'suspend',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+			        'delete' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/delete/[:id]',
+					        'defaults' => array(
+						        'controller' => 'Juno\Controller\Users',
+						        'action'     => 'delete',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+		        ),
+	        ),
 	        'login' => array(
 		        'type' => 'Segment',
 		        'options' => array(
@@ -47,10 +109,7 @@ return array(
     'controllers' => array(
         'invokables' => array(
             'Juno\Controller\Index' => 'Juno\Controller\IndexController',
-            'Juno\Controller\Api' => 'Juno\Controller\ApiController',
-            'Juno\Controller\Fence' => 'Juno\Controller\FenceController',
-	        'Juno\Controller\House' => 'Juno\Controller\HouseController',
-	        'Juno\Controller\Category' => 'Juno\Controller\CategoryController',
+            'Juno\Controller\User' => 'Juno\Controller\UserController',
         ),
 	    'factories' => array(
 		    'Juno\Controller\Auth' => 'Juno\Controller\AuthControllerFactory',
