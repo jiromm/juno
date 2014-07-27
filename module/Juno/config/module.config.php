@@ -32,18 +32,16 @@ return array(
 				        'options' => array(
 					        'route'    => '/add',
 					        'defaults' => array(
-						        'controller' => 'Juno\Controller\Users',
 						        'action'     => 'add',
 					        ),
 				        ),
 			        ),
-			        'edit' => array(
+			        'manage' => array(
 				        'type'    => 'Segment',
 				        'options' => array(
-					        'route'    => '/edit/[:id]',
+					        'route'    => '/manage/[:id]',
 					        'defaults' => array(
-						        'controller' => 'Juno\Controller\Users',
-						        'action'     => 'edit',
+						        'action'     => 'manage',
 					        ),
 					        'constraints' => array(
 						        'id' => '[1-9][0-9]*',
@@ -55,7 +53,6 @@ return array(
 				        'options' => array(
 					        'route'    => '/suspend/[:id]',
 					        'defaults' => array(
-						        'controller' => 'Juno\Controller\Users',
 						        'action'     => 'suspend',
 					        ),
 					        'constraints' => array(
@@ -68,7 +65,6 @@ return array(
 				        'options' => array(
 					        'route'    => '/delete/[:id]',
 					        'defaults' => array(
-						        'controller' => 'Juno\Controller\Users',
 						        'action'     => 'delete',
 					        ),
 					        'constraints' => array(

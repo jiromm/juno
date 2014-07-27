@@ -4,4 +4,8 @@ $(function() {
 		placement: 'top',
 		trigger: 'hover'
 	});
+
+	$('.selectize').selectize({
+		plugins: ['remove_button']
+	});
 });

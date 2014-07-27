@@ -2,6 +2,7 @@
 
 namespace Juno;
 
+use Juno\View\Helper\BreadcrumbHelper;
 use Juno\View\Helper\HasRoleHelper;
 use Juno\View\Helper\IdentityHelper;
 use Zend\Authentication\AuthenticationService;
@@ -54,12 +55,19 @@ class Module {
 		return array(
 			'invokables' => array(
 				'required' => 'Juno\View\Helper\RequiredHelper',
+				'info' => 'Juno\View\Helper\InfoHelper',
 			),
 			'factories' => array(
 				'ident' => function($sm) {
 					/** @var ServiceLocatorAwareInterface $sm */
 					return new IdentityHelper(
 						$sm->getServiceLocator()->get('Juno\Service\AuthService')
+					);
+				},
+				'breadcrumb' => function($sm) {
+					/** @var ServiceLocatorAwareInterface $sm */
+					return new BreadcrumbHelper(
+						$sm->getServiceLocator()
 					);
 				},
 			)

@@ -1,0 +1,63 @@
+<?php
+
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['User Management', $this->url('user')],
+	[$this->form->get('name')->getValue()]
+]);
+$this->layout()->actions = '<li><a href="' . $this->url('user') . '" class="btn btn-primary">Back</a></li>';
+$this->headTitle($this->form->get('name')->getValue());
+$this->layout()->pageTitle = $this->form->get('name')->getValue();
+
+?>
+
+<?php echo $this->form()->openTag($this->form); ?>
+
+<fieldset>
+	<legend>General</legend>
+
+	<div class="form-group">
+		<label for="name" class="col-sm-2 control-label">Name <?php echo $this->required(); ?></label>
+		<div class="col-sm-3">
+			<?php echo $this->formInput($this->form->get('name')); ?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="email" class="col-sm-2 control-label">Email <?php echo $this->required(); ?></label>
+		<div class="col-sm-3">
+			<?php echo $this->formInput($this->form->get('email')); ?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="login" class="col-sm-2 control-label">Login <?php echo $this->required(); ?></label>
+		<div class="col-sm-3">
+			<?php echo $this->formInput($this->form->get('login')); ?>
+		</div>
+	</div>
+
+	<div class="form-group">
+		<label for="password" class="col-sm-2 control-label">Password <?php echo $this->info('Don\'t fill out if you don\'t want to change it.'); ?></label>
+		<div class="col-sm-3">
+			<?php echo $this->formInput($this->form->get('password')); ?>
+		</div>
+	</div>
+</fieldset>
+
+<fieldset>
+	<legend>Permissions</legend>
+
+	<div class="form-group">
+		<div class="col-sm-offset-2 col-sm-10">
+			<?php echo $this->formSelect($this->form->get('permission')); ?>
+		</div>
+	</div>
+</fieldset>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-2">
+		<?php echo $this->formSubmit($this->form->get('submit')); ?>
+	</div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

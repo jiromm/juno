@@ -108,6 +108,18 @@ class CommonTableGateway extends TableGateway {
 		return parent::update($prepared, $where);
 	}
 
+	public function beginTransaction() {
+		$this->getAdapter()->getDriver()->getConnection()->beginTransaction();
+	}
+
+	public function commit() {
+		$this->getAdapter()->getDriver()->getConnection()->commit();
+	}
+
+	public function rollback() {
+		$this->getAdapter()->getDriver()->getConnection()->rollback();
+	}
+
 	/**
 	 * @param array $inputArray
 	 * @return array

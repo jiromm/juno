@@ -1,6 +1,8 @@
 <?php
 
-$this->layout()->breadcrumb = '<li class="active">User Management</li>';
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['User Management']
+]);
 $this->layout()->actions = '<li><a href="' . $this->url('user/add') . '" class="btn btn-primary">Add New User</a></li>';
 $this->headTitle('User Management');
 $this->layout()->pageTitle = 'User Management';
@@ -19,6 +21,7 @@ $data = $this->data;
 					<th>login</th>
 					<th>Name</th>
 					<th>Email</th>
+					<th>Primary</th>
 					<th></th>
 				</tr>
 			</thead>
@@ -29,9 +32,13 @@ $data = $this->data;
 					<td><?php echo $item->getLogin(); ?></td>
 					<td><?php echo $item->getName(); ?></td>
 					<td><?php echo $item->getEmail(); ?></td>
+					<td><?php echo $item->getIsPrimary() ? '<span class="label label-success">yes</span>' : ''; ?></td>
 					<td class="text-right">
+						<?php if ($item->getIsPrimary()) { ?>
+						<a href="<?php echo $this->url('user/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>
+						<?php } else { ?>
 						<div class="btn-group text-left">
-							<a href="<?php echo $this->url('user/edit', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Edit</a>
+							<a href="<?php echo $this->url('user/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>
 							<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
 								<span class="caret"></span>
 								<span class="sr-only">Toggle Dropdown</span>
@@ -41,6 +48,7 @@ $data = $this->data;
 								<li><a href="<?php echo $this->url('user/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
 							</ul>
 						</div>
+						<?php } ?>
 					</td>
 				</tr>
 				<?php } ?>
