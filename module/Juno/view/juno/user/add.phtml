@@ -2,11 +2,11 @@
 
 $this->layout()->breadcrumb = $this->breadcrumb([
 	['User Management', $this->url('user')],
-	[$this->form->get('name')->getValue()]
+	['Add User'],
 ]);
 $this->layout()->actions = '<li><a href="' . $this->url('user') . '" class="btn btn-primary">Back</a></li>';
-$this->headTitle($this->form->get('name')->getValue());
-$this->layout()->pageTitle = $this->form->get('name')->getValue();
+$this->headTitle('Add User');
+$this->layout()->pageTitle = 'Add User';
 
 ?>
 
@@ -37,14 +37,13 @@ $this->layout()->pageTitle = $this->form->get('name')->getValue();
 	</div>
 
 	<div class="form-group">
-		<label for="password" class="col-sm-2 control-label">Password <?php echo $this->info('Don\'t fill out if you don\'t want to change it.'); ?></label>
+		<label for="password" class="col-sm-2 control-label">Password <?php echo $this->required(); ?></label>
 		<div class="col-sm-3">
 			<?php echo $this->formInput($this->form->get('password')); ?>
 		</div>
 	</div>
 </fieldset>
 
-<?php if (!$this->isPrimaryUser) { ?>
 <fieldset>
 	<legend>Permissions</legend>
 
@@ -54,7 +53,6 @@ $this->layout()->pageTitle = $this->form->get('name')->getValue();
 		</div>
 	</div>
 </fieldset>
-<?php } ?>
 
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-2">

@@ -17,7 +17,7 @@ class User extends GeneralServiceBase {
 		 */
 		$userMapper = $this->getServiceLocator()->get('UserMapper');
 
-		return $userMapper->fetchAll();
+		return $userMapper->getAllUsers();
 	}
 
 	/**

@@ -28,7 +28,7 @@ $data = $this->data;
 			<tbody>
 			<?php if ($this->data) { ?>
 				<?php foreach ($data as $item) { ?>
-				<tr>
+				<tr<?php if (!$item->getIsActive()) { ?> class="danger"<?php } ?>>
 					<td><?php echo $item->getLogin(); ?></td>
 					<td><?php echo $item->getName(); ?></td>
 					<td><?php echo $item->getEmail(); ?></td>
@@ -44,7 +44,11 @@ $data = $this->data;
 								<span class="sr-only">Toggle Dropdown</span>
 							</button>
 							<ul class="dropdown-menu" role="menu">
+								<?php if ($item->getIsActive()) { ?>
 								<li><a href="<?php echo $this->url('user/suspend', ['id' => $item->getId()]); ?>">Suspend</a></li>
+								<?php } else { ?>
+								<li><a href="<?php echo $this->url('user/activate', ['id' => $item->getId()]); ?>">Activate</a></li>
+								<?php } ?>
 								<li><a href="<?php echo $this->url('user/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
 							</ul>
 						</div>

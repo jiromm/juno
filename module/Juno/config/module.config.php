@@ -60,6 +60,18 @@ return array(
 					        ),
 				        ),
 			        ),
+			        'activate' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/activate/[:id]',
+					        'defaults' => array(
+						        'action'     => 'activate',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
 			        'delete' => array(
 				        'type'    => 'Segment',
 				        'options' => array(
@@ -100,6 +112,9 @@ return array(
 	    'factories' => array(
 		    'Juno\Service\AuthService' => 'Juno\Service\AuthServiceFactory',
 		    'Juno\Service\AuthAdapter' => 'Juno\Service\AuthAdapterFactory',
+	    ),
+	    'aliases' => array(
+		    'auth' => 'Juno\Service\AuthService',
 	    ),
     ),
     'controllers' => array(

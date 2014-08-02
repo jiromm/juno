@@ -3,24 +3,29 @@
 namespace Juno\Controller;
 
 use Config\Helper\Utils;
+use Config\Library\CommonController;
 use Config\Service\User as UserService;
 use Config\Mapper\User as UserMapper;
 use Config\Mapper\RelUserPermission as RelUserPermissionMapper;
 use Config\Entity\User as UserEntity;
 use Config\Entity\RelUserPermission as RelUserPermissionEntity;
 use Juno\Form\User as UserForm;
-use Zend\Debug\Debug;
 use Zend\Http\Request;
-use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
-class UserController extends AbstractActionController {
+class UserController extends CommonController {
+	public function init() {
+		/**
+		 * @todo: security checks
+		 */
+	}
+
     public function indexAction() {
 	    /**
 	     * @var UserService $service
 	     */
 	    $service = $this->getServiceLocator()->get('UserService');
-	    $result = $service->getAllActiveUsers();
+	    $result = $service->getAllUsers();
 
 	    return new ViewModel([
 		    'data' => $result,
@@ -30,45 +35,73 @@ class UserController extends AbstractActionController {
 	public function addAction() {
 		/**
 		 * @var Request $request
-		 * @var HouseMapper $mapper
+		 * @var UserMapper $mapper
+		 * @var RelUserPermissionMapper $permissionMapper
+		 * @var UserEntity|bool $result
 		 */
 		$request = $this->getRequest();
 
-		$houseForm = new House($this->getServiceLocator(), $this->url()->fromRoute('house/add'));
-		$houseForm->prepare();
+		$mapper = $this->getServiceLocator()->get('UserMapper');
+		$permissionMapper = $this->getServiceLocator()->get('RelUserPermissionMapper');
+
+		$form = new UserForm($this->getServiceLocator(), $this->url()->fromRoute('user/add'));
+		$form->prepare();
 
 		if ($request->isPost()) {
-			$post = array_merge_recursive(
-				$request->getPost()->toArray(),
-				$request->getFiles()->toArray()
-			);
+			$form->setData($request->getPost());
 
-			$houseForm->setData($post);
+			if ($form->isValid()) {
+				$entity = new UserEntity();
+				$entity->setName($request->getPost('name'));
+				$entity->setEmail($request->getPost('email'));
+				$entity->setLogin($request->getPost('login'));
+				$entity->setCompanyId($this->getIdentity()->company_id);
+				$entity->setIsPrimary(0);
+				$entity->setPassword(
+					Utils::generateHash($request->getPost('password'))
+				);
 
-			if ($houseForm->isValid()) {
-				$houseEntity = new HouseEntity();
-				$houseEntity->setName($request->getPost('name'));
+				$mapper->beginTransaction();
 
-				$mapper = $this->getServiceLocator()->get('HouseMapper');
-				$mapper->insert($houseEntity);
+				try {
+					$mapper->insert($entity);
+					$userId = $mapper->lastInsertValue;
 
-				$lastInsertId = $mapper->lastInsertValue;
-				$dir = './public/upload/house/' . $lastInsertId;
+					// Manage permissions
+					$permissionMapper->delete(['user_id' => $userId]);
 
-				if (!is_dir($dir)) {
-					if (!mkdir($dir, 0755, true)) {
-						throw new \Exception('Cannot create directory: ' . $dir);
+					if (count($request->getPost('permission'))) {
+						$permissionEntity = new RelUserPermissionEntity();
+
+						foreach ($request->getPost('permission') as $role) {
+							$permissionEntity->setPermissionId($role);
+							$permissionEntity->setUserId($userId);
+							$permissionMapper->insert($permissionEntity);
+						}
 					}
-				}
 
-				$this->redirect()->toRoute('house');
+					$mapper->commit();
+					$this->flashMessenger()->addSuccessMessage('User successfully added!');
+					$this->redirect()->toRoute('user/manage', ['id' => $userId]);
+					return $this->getResponse();
+				} catch (\Exception $ex) {
+					$mapper->rollback();
+					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!' . $ex->getMessage());
+				}
 			} else {
-				$houseForm->populateValues($request->getPost());
+				$this->flashMessenger()->addErrorMessage('Form is not valid!');
+				$form->populateValues($request->getPost());
 			}
+
+			$this->redirect()->toRoute('user/add');
+		} else {
+			$form->populateValues(
+				$request->getPost()
+			);
 		}
 
 		return new ViewModel([
-			'form' => $houseForm,
+			'form' => $form,
 			'error' => isset($error) ? $error : false,
 		]);
 	}
@@ -163,6 +196,53 @@ class UserController extends AbstractActionController {
 			'form' => $form,
 			'error' => isset($error) ? $error : false,
 			'id' => $userId,
+			'isPrimaryUser' => $result->getIsPrimary(),
+		]);
+	}
+
+	public function suspendAction() {
+		/**
+		 * @var UserMapper $mapper
+		 */
+		$mapper = $this->getServiceLocator()->get('UserMapper');
+		$entity = new UserEntity();
+		$entity->setIsActive(0);
+
+		try {
+			$mapper->update($entity, ['id' => $this->params()->fromRoute('id')]);
+
+			$this->flashMessenger()->addSuccessMessage('User has been successfully suspended!');
+		} catch (\Exception $ex) {
+			$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
+		}
+
+		$this->redirect()->toRoute('user');
+
+		return new ViewModel([
+			'id' => $this->params()->fromRoute('id'),
+		]);
+	}
+
+	public function activateAction() {
+		/**
+		 * @var UserMapper $mapper
+		 */
+		$mapper = $this->getServiceLocator()->get('UserMapper');
+		$entity = new UserEntity();
+		$entity->setIsActive(1);
+
+		try {
+			$mapper->update($entity, ['id' => $this->params()->fromRoute('id')]);
+
+			$this->flashMessenger()->addSuccessMessage('User has been successfully activated!');
+		} catch (\Exception $ex) {
+			$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
+		}
+
+		$this->redirect()->toRoute('user');
+
+		return new ViewModel([
+			'id' => $this->params()->fromRoute('id'),
 		]);
 	}
 
@@ -189,7 +269,7 @@ class UserController extends AbstractActionController {
 			$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
 		}
 
-		$this->redirect()->toRoute('house');
+		$this->redirect()->toRoute('user');
 
 		return new ViewModel([
 			'id' => $this->params()->fromRoute('id'),
