@@ -3,13 +3,13 @@
 <source>
 <database charset="utf8" collation="utf8_general_ci">juno</database>
 </source>
-<canvas zoom="100">
+<canvas zoom="80">
 <tables>
 <table name="user" view="colnames">
-<left>251</left>
-<top>26</top>
-<width>121</width>
-<height>205</height>
+<left>382</left>
+<top>75</top>
+<width>92</width>
+<height>181</height>
 <sql_create_table>CREATE TABLE `user` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `company_id` int(11) unsigned NOT NULL,
@@ -19,28 +19,30 @@
   `email` varchar(256) DEFAULT NULL,
   `is_active` tinyint(4) unsigned NOT NULL DEFAULT '1',
   `is_primary` tinyint(4) unsigned NOT NULL DEFAULT '1',
+  `is_removed` tinyint(4) unsigned NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`),
+  UNIQUE KEY `login` (`login`),
   KEY `user_company_id` (`company_id`),
   CONSTRAINT `user_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="permission" view="colnames">
-<left>247</left>
-<top>257</top>
-<width>121</width>
-<height>124</height>
+<left>237</left>
+<top>228</top>
+<width>105</width>
+<height>99</height>
 <sql_create_table>CREATE TABLE `permission` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(256) NOT NULL,
   `description` varchar(512) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="rel_user_permission" view="colnames">
-<left>56</left>
-<top>125</top>
-<width>125</width>
-<height>124</height>
+<left>45</left>
+<top>101</top>
+<width>150</width>
+<height>99</height>
 <sql_create_table>CREATE TABLE `rel_user_permission` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `user_id` int(11) unsigned NOT NULL,
@@ -50,13 +52,13 @@
   KEY `rel_user_permission_permission_id` (`permission_id`),
   CONSTRAINT `rel_user_permission_permission_id` FOREIGN KEY (`permission_id`) REFERENCES `permission` (`id`),
   CONSTRAINT `rel_user_permission_user_id` FOREIGN KEY (`user_id`) REFERENCES `user` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="company" view="colnames">
-<left>502</left>
-<top>108</top>
-<width>119</width>
-<height>141</height>
+<left>636</left>
+<top>392</top>
+<width>94</width>
+<height>113</height>
 <sql_create_table>CREATE TABLE `company` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `plan_id` int(11) unsigned NOT NULL,
@@ -65,13 +67,13 @@
   PRIMARY KEY (`id`),
   KEY `company_plan_id` (`plan_id`),
   CONSTRAINT `company_plan_id` FOREIGN KEY (`plan_id`) REFERENCES `plan` (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="feature" view="colnames">
-<left>700</left>
-<top>371</top>
-<width>116</width>
-<height>124</height>
+<left>995</left>
+<top>394</top>
+<width>86</width>
+<height>99</height>
 <sql_create_table>CREATE TABLE `feature` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
@@ -80,10 +82,10 @@
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="rel_company_feature" view="colnames">
-<left>861</left>
-<top>42</top>
-<width>115</width>
-<height>124</height>
+<left>802</left>
+<top>285</top>
+<width>143</width>
+<height>99</height>
 <sql_create_table>CREATE TABLE `rel_company_feature` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `company_id` int(11) unsigned NOT NULL,
@@ -96,15 +98,174 @@
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 <table name="plan" view="colnames">
-<left>698</left>
-<top>192</top>
-<width>108</width>
-<height>124</height>
+<left>786</left>
+<top>551</top>
+<width>86</width>
+<height>99</height>
 <sql_create_table>CREATE TABLE `plan` (
   `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
   `name` varchar(64) DEFAULT NULL,
   `description` varchar(255) DEFAULT NULL,
   PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="user_admin" view="colnames">
+<left>69</left>
+<top>366</top>
+<width>117</width>
+<height>113</height>
+<sql_create_table>CREATE TABLE `user_admin` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `login` varchar(64) NOT NULL,
+  `password` varchar(60) NOT NULL,
+  `is_active` tinyint(4) unsigned NOT NULL DEFAULT '1',
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="point_of_sale" view="colnames">
+<left>451</left>
+<top>383</top>
+<width>118</width>
+<height>113</height>
+<sql_create_table>CREATE TABLE `point_of_sale` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `point_of_sale_company_id` (`company_id`),
+  CONSTRAINT `point_of_sale_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="warehouse" view="colnames">
+<left>458</left>
+<top>742</top>
+<width>92</width>
+<height>113</height>
+<sql_create_table>CREATE TABLE `warehouse` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `address` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `warehouse_company_id` (`company_id`),
+  CONSTRAINT `warehouse_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="rel_product_point_of_sale" view="colnames">
+<left>239</left>
+<top>472</top>
+<width>175</width>
+<height>99</height>
+<sql_create_table>CREATE TABLE `rel_product_point_of_sale` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) unsigned NOT NULL,
+  `point_of_sale_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rel_product_point_of_sale_point_of_sale_id` (`point_of_sale_id`),
+  KEY `rel_product_point_of_sale_product_id` (`product_id`),
+  CONSTRAINT `rel_product_point_of_sale_point_of_sale_id` FOREIGN KEY (`point_of_sale_id`) REFERENCES `point_of_sale` (`id`),
+  CONSTRAINT `rel_product_point_of_sale_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="rel_product_warehouse" view="colnames">
+<left>281</left>
+<top>712</top>
+<width>157</width>
+<height>99</height>
+<sql_create_table>CREATE TABLE `rel_product_warehouse` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `product_id` int(11) unsigned NOT NULL,
+  `warehouse_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rel_product_warehouse_warehouse_id` (`warehouse_id`),
+  KEY `rel_product_warehouse_product_id` (`product_id`),
+  CONSTRAINT `rel_product_warehouse_product_id` FOREIGN KEY (`product_id`) REFERENCES `product` (`id`),
+  CONSTRAINT `rel_product_warehouse_warehouse_id` FOREIGN KEY (`warehouse_id`) REFERENCES `warehouse` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="product" view="colnames">
+<left>117</left>
+<top>593</top>
+<width>86</width>
+<height>148</height>
+<sql_create_table>CREATE TABLE `product` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `type_id` int(11) unsigned NOT NULL,
+  `quantity` int(11) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  `description` text,
+  `property1` varchar(255) DEFAULT NULL,
+  `property2` varchar(255) DEFAULT NULL,
+  `property3` varchar(255) DEFAULT NULL,
+  `property4` varchar(255) DEFAULT NULL,
+  `property5` varchar(255) DEFAULT NULL,
+  `property6` varchar(255) DEFAULT NULL,
+  `property7` varchar(255) DEFAULT NULL,
+  `property8` varchar(255) DEFAULT NULL,
+  `property9` varchar(255) DEFAULT NULL,
+  `property10` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_type_id` (`type_id`),
+  CONSTRAINT `product_type_id` FOREIGN KEY (`type_id`) REFERENCES `product_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="product_type" view="colnames">
+<left>416</left>
+<top>592</top>
+<width>107</width>
+<height>99</height>
+<sql_create_table>CREATE TABLE `product_type` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `product_type_company_id` (`company_id`),
+  CONSTRAINT `product_type_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="property" view="colnames">
+<left>865</left>
+<top>728</top>
+<width>115</width>
+<height>99</height>
+<sql_create_table>CREATE TABLE `property` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `property_type_id` int(11) unsigned NOT NULL,
+  `name` varchar(255) DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `property_property_id` (`property_type_id`),
+  CONSTRAINT `property_property_id` FOREIGN KEY (`property_type_id`) REFERENCES `property_type` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="property_type" view="colnames">
+<left>1019</left>
+<top>599</top>
+<width>112</width>
+<height>99</height>
+<sql_create_table>CREATE TABLE `property_type` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `company_id` int(11) unsigned NOT NULL,
+  `is_verified` tinyint(1) unsigned NOT NULL DEFAULT '0',
+  PRIMARY KEY (`id`),
+  KEY `property_type_company_id` (`company_id`),
+  CONSTRAINT `property_type_company_id` FOREIGN KEY (`company_id`) REFERENCES `company` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
+</table>
+<table name="rel_product_type_property" view="colnames">
+<left>638</left>
+<top>761</top>
+<width>182</width>
+<height>98</height>
+<sql_create_table>CREATE TABLE `rel_product_type_property` (
+  `id` int(11) unsigned NOT NULL AUTO_INCREMENT,
+  `product_type_id` int(11) unsigned NOT NULL,
+  `property_id` int(11) unsigned NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `rel_product_type_property_product_type_id` (`product_type_id`),
+  KEY `rel_product_type_property_property_id` (`property_id`),
+  CONSTRAINT `rel_product_type_property_product_type_id` FOREIGN KEY (`product_type_id`) REFERENCES `product_type` (`id`),
+  CONSTRAINT `rel_product_type_property_property_id` FOREIGN KEY (`property_id`) REFERENCES `property` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8</sql_create_table>
 </table>
 </tables>
