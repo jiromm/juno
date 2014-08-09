@@ -48,6 +48,15 @@ return array(
 			'adapter' => 'Zend\Db\Adapter\Adapter',
 
 			// Mappers
+			'WarehouseMapper' => 'Config\Mapper\Warehouse',
+			'RelProductWarehouseMapper' => 'Config\Mapper\RelProductWarehouse',
+			'RelProductTypePropertyMapper' => 'Config\Mapper\RelProductTypeProperty',
+			'RelProductPointOfSaleMapper' => 'Config\Mapper\RelProductPointOfSale',
+			'PropertyTypeMapper' => 'Config\Mapper\PropertyType',
+			'PropertyMapper' => 'Config\Mapper\Property',
+			'ProductTypeMapper' => 'Config\Mapper\ProductType',
+			'ProductMapper' => 'Config\Mapper\Product',
+			'PointOfSaleMapper' => 'Config\Mapper\PointOfSale',
 			'CompanyMapper' => 'Config\Mapper\Company',
 			'FeatureMapper' => 'Config\Mapper\Feature',
 			'PermissionMapper' => 'Config\Mapper\Permission',
@@ -79,6 +88,60 @@ return array(
 					'password' => $dbParams['password'],
 					'hostname' => $dbParams['hostname'],
 				]);
+			},
+			'Config\Mapper\Warehouse' => function($sm) {
+				return new \Config\Mapper\Warehouse(
+					$sm->get('adapter'),
+					new \Config\Entity\Warehouse()
+				);
+			},
+			'Config\Mapper\RelProductWarehouse' => function($sm) {
+				return new \Config\Mapper\RelProductWarehouse(
+					$sm->get('adapter'),
+					new \Config\Entity\RelProductWarehouse()
+				);
+			},
+			'Config\Mapper\RelProductTypeProperty' => function($sm) {
+				return new \Config\Mapper\RelProductTypeProperty(
+					$sm->get('adapter'),
+					new \Config\Entity\RelProductTypeProperty()
+				);
+			},
+			'Config\Mapper\RelProductPointOfSale' => function($sm) {
+				return new \Config\Mapper\RelProductPointOfSale(
+					$sm->get('adapter'),
+					new \Config\Entity\RelProductPointOfSale()
+				);
+			},
+			'Config\Mapper\PropertyType' => function($sm) {
+				return new \Config\Mapper\PropertyType(
+					$sm->get('adapter'),
+					new \Config\Entity\PropertyType()
+				);
+			},
+			'Config\Mapper\Property' => function($sm) {
+				return new \Config\Mapper\Property(
+					$sm->get('adapter'),
+					new \Config\Entity\Property()
+				);
+			},
+			'Config\Mapper\ProductType' => function($sm) {
+				return new \Config\Mapper\ProductType(
+					$sm->get('adapter'),
+					new \Config\Entity\ProductType()
+				);
+			},
+			'Config\Mapper\Product' => function($sm) {
+				return new \Config\Mapper\Product(
+					$sm->get('adapter'),
+					new \Config\Entity\Product()
+				);
+			},
+			'Config\Mapper\PointOfSale' => function($sm) {
+				return new \Config\Mapper\PointOfSale(
+					$sm->get('adapter'),
+					new \Config\Entity\PointOfSale()
+				);
 			},
 			'Config\Mapper\Company' => function($sm) {
 				return new \Config\Mapper\Company(
