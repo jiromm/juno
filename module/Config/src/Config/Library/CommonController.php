@@ -33,6 +33,10 @@ class CommonController extends AbstractActionController {
 		return $this->getAuth()->getIdentity();
 	}
 
+	public function getCompanyId() {
+		return $this->getAuth()->getIdentity()->company_id;
+	}
+
 	/**
 	 * @return AuthenticationService
 	 */

@@ -66,10 +66,19 @@ return array(
 			'UserMapper' => 'Config\Mapper\User',
 			'UserAdminMapper' => 'Config\Mapper\UserAdmin',
 
+			// Services
 			'ProductService' => 'Config\Service\Product',
+			'PointOfSellService' => 'Config\Service\PointOfSell',
+			'WarehouseService' => 'Config\Service\Warehouse',
 			'UserService' => 'Config\Service\User',
 		),
 		'factories' => array(
+			'Config\Service\Warehouse' => function($sm) {
+				return new \Config\Service\Warehouse($sm);
+			},
+			'Config\Service\PointOfSell' => function($sm) {
+				return new \Config\Service\PointOfSell($sm);
+			},
 			'Config\Service\Product' => function($sm) {
 				return new \Config\Service\Product($sm);
 			},

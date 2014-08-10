@@ -26,7 +26,7 @@ $data = $this->data;
 				</tr>
 			</thead>
 			<tbody>
-			<?php if ($this->data) { ?>
+			<?php if ($this->data->count()) { ?>
 				<?php foreach ($data as $item) { ?>
 				<tr<?php if (!$item->getIsActive()) { ?> class="danger"<?php } ?>>
 					<td><?php echo $item->getLogin(); ?></td>

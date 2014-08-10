@@ -1,0 +1,57 @@
+<?php
+
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['Warehouses']
+]);
+$this->layout()->actions = '<li><a href="' . $this->url('warehouse/add') . '" class="btn btn-primary">Add Warehouse</a></li>';
+$this->headTitle('Warehouses');
+$this->layout()->pageTitle = 'Warehouses';
+
+/**
+ * @var \Config\Entity\Warehouse[]|\ArrayObject $data
+ */
+$data = $this->data;
+
+?>
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-condensed table-striped table-hover">
+			<thead>
+			<tr>
+				<th>Name</th>
+				<th>Products</th>
+				<th></th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php if ($this->data->count()) { ?>
+				<?php foreach ($data as $item) { ?>
+					<tr>
+						<td><?php echo $item->getName(); ?></td>
+						<td>xxx</td>
+						<td class="text-right">
+							<div class="btn-group text-left">
+								<a href="<?php echo $this->url('warehouse/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>
+								<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="<?php echo $this->url('warehouse/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				<?php } ?>
+			<?php } else { ?>
+				<tr>
+					<td colspan="10">
+						No warehouses found
+						<a href="<?php echo $this->url('warehouse/add'); ?>">Add Warehouse</a>
+					</td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>
+	</div>
+</div>

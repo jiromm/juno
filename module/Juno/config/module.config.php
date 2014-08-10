@@ -32,7 +32,7 @@ return array(
 				        'options' => array(
 					        'route'    => '/add',
 					        'defaults' => array(
-						        'action'     => 'add',
+						        'action' => 'add',
 					        ),
 				        ),
 			        ),
@@ -53,7 +53,7 @@ return array(
 				        'options' => array(
 					        'route'    => '/suspend/[:id]',
 					        'defaults' => array(
-						        'action'     => 'suspend',
+						        'action' => 'suspend',
 					        ),
 					        'constraints' => array(
 						        'id' => '[1-9][0-9]*',
@@ -65,7 +65,7 @@ return array(
 				        'options' => array(
 					        'route'    => '/activate/[:id]',
 					        'defaults' => array(
-						        'action'     => 'activate',
+						        'action' => 'activate',
 					        ),
 					        'constraints' => array(
 						        'id' => '[1-9][0-9]*',
@@ -77,7 +77,53 @@ return array(
 				        'options' => array(
 					        'route'    => '/delete/[:id]',
 					        'defaults' => array(
-						        'action'     => 'delete',
+						        'action' => 'delete',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+		        ),
+	        ),
+	        'warehouse' => array(
+		        'type' => 'Literal',
+		        'options' => array(
+			        'route'    => '/warehouse',
+			        'defaults' => array(
+				        'controller' => 'Juno\Controller\Warehouse',
+				        'action'     => 'index',
+			        ),
+		        ),
+		        'may_terminate' => true,
+		        'child_routes' => array(
+			        'add' => array(
+				        'type'    => 'Literal',
+				        'options' => array(
+					        'route'    => '/add',
+					        'defaults' => array(
+						        'action' => 'add',
+					        ),
+				        ),
+			        ),
+			        'manage' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/manage/[:id]',
+					        'defaults' => array(
+						        'action' => 'manage',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+			        'delete' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/delete/[:id]',
+					        'defaults' => array(
+						        'action' => 'delete',
 					        ),
 					        'constraints' => array(
 						        'id' => '[1-9][0-9]*',
@@ -121,6 +167,9 @@ return array(
         'invokables' => array(
             'Juno\Controller\Index' => 'Juno\Controller\IndexController',
             'Juno\Controller\User' => 'Juno\Controller\UserController',
+            'Juno\Controller\Warehouse' => 'Juno\Controller\WarehouseController',
+            'Juno\Controller\PointOfSell' => 'Juno\Controller\PointOfSellController',
+            'Juno\Controller\Product' => 'Juno\Controller\ProductController',
         ),
 	    'factories' => array(
 		    'Juno\Controller\Auth' => 'Juno\Controller\AuthControllerFactory',

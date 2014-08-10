@@ -55,7 +55,7 @@ class UserController extends CommonController {
 				$entity->setName($request->getPost('name'));
 				$entity->setEmail($request->getPost('email'));
 				$entity->setLogin($request->getPost('login'));
-				$entity->setCompanyId($this->getIdentity()->company_id);
+				$entity->setCompanyId($this->getCompanyId());
 				$entity->setIsPrimary(0);
 				$entity->setPassword(
 					Utils::generateHash($request->getPost('password'))
@@ -86,7 +86,7 @@ class UserController extends CommonController {
 					return $this->getResponse();
 				} catch (\Exception $ex) {
 					$mapper->rollback();
-					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!' . $ex->getMessage());
+					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
 				}
 			} else {
 				$this->flashMessenger()->addErrorMessage('Form is not valid!');
@@ -194,7 +194,6 @@ class UserController extends CommonController {
 
 		return new ViewModel([
 			'form' => $form,
-			'error' => isset($error) ? $error : false,
 			'id' => $userId,
 			'isPrimaryUser' => $result->getIsPrimary(),
 		]);
