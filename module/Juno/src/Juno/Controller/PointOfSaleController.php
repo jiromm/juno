@@ -3,14 +3,14 @@
 namespace Juno\Controller;
 
 use Config\Library\CommonController;
-use Config\Service\Warehouse as WarehouseService;
-use Config\Mapper\Warehouse as WarehouseMapper;
-use Config\Entity\Warehouse as WarehouseEntity;
-use Juno\Form\Warehouse as WarehouseForm;
+use Config\Service\PointOfSale as PointOfSaleService;
+use Config\Mapper\PointOfSale as PointOfSaleMapper;
+use Config\Entity\PointOfSale as PointOfSaleEntity;
+use Juno\Form\PointOfSale as PointOfSaleForm;
 use Zend\Http\Request;
 use Zend\View\Model\ViewModel;
 
-class WarehouseController extends CommonController {
+class PointOfSaleController extends CommonController {
 	public function init() {
 		/**
 		 * @todo: security checks
@@ -19,10 +19,10 @@ class WarehouseController extends CommonController {
 
 	public function indexAction() {
 		/**
-		 * @var WarehouseService $service
+		 * @var PointOfSaleService $service
 		 */
-		$service = $this->getServiceLocator()->get('WarehouseService');
-		$result = $service->getWarehouses();
+		$service = $this->getServiceLocator()->get('PointOfSaleService');
+		$result = $service->getPointsOfSale();
 
 		return new ViewModel([
 			'data' => $result,
@@ -32,30 +32,30 @@ class WarehouseController extends CommonController {
 	public function addAction() {
 		/**
 		 * @var Request $request
-		 * @var WarehouseMapper $mapper
-		 * @var WarehouseEntity|bool $result
+		 * @var PointOfSaleMapper $mapper
+		 * @var PointOfSaleEntity|bool $result
 		 */
 		$request = $this->getRequest();
 
-		$mapper = $this->getServiceLocator()->get('WarehouseMapper');
+		$mapper = $this->getServiceLocator()->get('PointOfSaleMapper');
 
-		$form = new WarehouseForm($this->getServiceLocator(), $this->url()->fromRoute('warehouse/add'));
+		$form = new PointOfSaleForm($this->getServiceLocator(), $this->url()->fromRoute('point-of-sale/add'));
 		$form->prepare();
 
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$entity = new WarehouseEntity();
+				$entity = new PointOfSaleEntity();
 				$entity->setName($request->getPost('name'));
 				$entity->setAddress($request->getPost('address'));
 				$entity->setCompanyId($this->getCompanyId());
 
 				try {
 					$mapper->insert($entity);
-					$warehouseId = $mapper->lastInsertValue;
+					$pointOfSaleId = $mapper->lastInsertValue;
 
-					$this->redirect()->toRoute('warehouse/manage', ['id' => $warehouseId]);
+					$this->redirect()->toRoute('point-of-sale/manage', ['id' => $pointOfSaleId]);
 					return $this->getResponse();
 				} catch (\Exception $ex) {
 					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
@@ -65,7 +65,7 @@ class WarehouseController extends CommonController {
 				$form->populateValues($request->getPost());
 			}
 
-			$this->redirect()->toRoute('warehouse/add');
+			$this->redirect()->toRoute('point-of-sale/add');
 		} else {
 			$form->populateValues(
 				$request->getPost()
@@ -81,19 +81,19 @@ class WarehouseController extends CommonController {
 	public function manageAction() {
 		/**
 		 * @var Request $request
-		 * @var WarehouseMapper $mapper
-		 * @var WarehouseEntity|bool $result
+		 * @var PointOfSaleMapper $mapper
+		 * @var PointOfSaleEntity|bool $result
 		 */
 		$request = $this->getRequest();
-		$warehouseId = $this->params()->fromRoute('id');
+		$pointOfSaleId = $this->params()->fromRoute('id');
 
-		$mapper = $this->getServiceLocator()->get('WarehouseMapper');
+		$mapper = $this->getServiceLocator()->get('PointOfSaleMapper');
 		$result = $mapper->fetchOne([
-			'id' => $warehouseId,
+			'id' => $pointOfSaleId,
 		]);
 
-		$form = new WarehouseForm($this->getServiceLocator(), $this->url()->fromRoute('warehouse/manage', [
-			'id' => $warehouseId,
+		$form = new PointOfSaleForm($this->getServiceLocator(), $this->url()->fromRoute('point-of-sale/manage', [
+			'id' => $pointOfSaleId,
 		]));
 		$form->prepare();
 
@@ -101,12 +101,12 @@ class WarehouseController extends CommonController {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$entity = new WarehouseEntity();
+				$entity = new PointOfSaleEntity();
 				$entity->setName($request->getPost('name'));
 				$entity->setAddress($request->getPost('address'));
 
 				try {
-					$mapper->update($entity, ['id' => $warehouseId]);
+					$mapper->update($entity, ['id' => $pointOfSaleId]);
 					$this->flashMessenger()->addSuccessMessage($request->getPost('name') . ' has been successfully modified!');
 				} catch (\Exception $ex) {
 					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
@@ -117,7 +117,7 @@ class WarehouseController extends CommonController {
 				$form->populateValues($request->getPost());
 			}
 
-			$this->redirect()->toRoute('warehouse/manage', ['id' => $warehouseId]);
+			$this->redirect()->toRoute('point-of-sale/manage', ['id' => $pointOfSaleId]);
 		} else {
 			$form->populateValues(
 				$result->exchangeArray()
@@ -126,24 +126,24 @@ class WarehouseController extends CommonController {
 
 		return new ViewModel([
 			'form' => $form,
-			'id' => $warehouseId,
+			'id' => $pointOfSaleId,
 		]);
 	}
 
 	public function deleteAction() {
 		/**
-		 * @var WarehouseMapper $mapper
+		 * @var PointOfSaleMapper $mapper
 		 */
-		$mapper = $this->getServiceLocator()->get('WarehouseMapper');
+		$mapper = $this->getServiceLocator()->get('PointOfSaleMapper');
 
 		try {
 			$mapper->delete(['id' => $this->params()->fromRoute('id')]);
-			$this->flashMessenger()->addSuccessMessage('Warehouse has been successfully removed!');
+			$this->flashMessenger()->addSuccessMessage('Point of Sale has been successfully removed!');
 		} catch (\Exception $ex) {
 			$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
 		}
 
-		$this->redirect()->toRoute('warehouse');
+		$this->redirect()->toRoute('point-of-sale');
 
 		return new ViewModel([
 			'id' => $this->params()->fromRoute('id'),

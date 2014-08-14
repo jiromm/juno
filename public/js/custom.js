@@ -8,4 +8,12 @@ $(function() {
 	$('.selectize').selectize({
 		plugins: ['remove_button']
 	});
+
+	var dt = $('.dataTables'),
+		lastIndex = dt.find('th').length - 1,
+		dto = dt.dataTable({
+		"aoColumnDefs": [{
+			"bSortable": false, "aTargets": [lastIndex]
+		}]
+	});
 });

@@ -1,14 +1,14 @@
 <?php
 
 $this->layout()->breadcrumb = $this->breadcrumb([
-	['Warehouses']
+	['Points of Sale']
 ]);
-$this->layout()->actions = '<li><a href="' . $this->url('warehouse/add') . '" class="btn btn-primary">Add Warehouse</a></li>';
-$this->headTitle('Warehouses');
-$this->layout()->pageTitle = 'Warehouses';
+$this->layout()->actions = '<li><a href="' . $this->url('point-of-sale/add') . '" class="btn btn-primary">Add Point of Sale</a></li>';
+$this->headTitle('Points of Sale');
+$this->layout()->pageTitle = 'Points of Sale';
 
 /**
- * @var \Config\Entity\Warehouse[]|\ArrayObject $data
+ * @var \Config\Entity\PointOfSale[]|\ArrayObject $data
  */
 $data = $this->data;
 
@@ -31,13 +31,13 @@ $data = $this->data;
 						<td>xxx</td>
 						<td class="text-right">
 							<div class="btn-group text-left">
-								<a href="<?php echo $this->url('warehouse/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>
+								<a href="<?php echo $this->url('point-of-sale/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>
 								<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
 									<span class="caret"></span>
 									<span class="sr-only">Toggle Dropdown</span>
 								</button>
 								<ul class="dropdown-menu" role="menu">
-									<li><a href="<?php echo $this->url('warehouse/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
+									<li><a href="<?php echo $this->url('point-of-sale/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
 								</ul>
 							</div>
 						</td>
@@ -46,8 +46,8 @@ $data = $this->data;
 			<?php } else { ?>
 				<tr>
 					<td>
-						No warehouses found
-						<a href="<?php echo $this->url('warehouse/add'); ?>">Add Warehouse</a>
+						No points of sale found
+						<a href="<?php echo $this->url('point-of-sale/add'); ?>">Add Point of Sale</a>
 					</td>
 					<td></td>
 					<td></td>

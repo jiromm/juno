@@ -68,7 +68,7 @@ return array(
 
 			// Services
 			'ProductService' => 'Config\Service\Product',
-			'PointOfSellService' => 'Config\Service\PointOfSell',
+			'PointOfSaleService' => 'Config\Service\PointOfSale',
 			'WarehouseService' => 'Config\Service\Warehouse',
 			'UserService' => 'Config\Service\User',
 		),
@@ -76,8 +76,8 @@ return array(
 			'Config\Service\Warehouse' => function($sm) {
 				return new \Config\Service\Warehouse($sm);
 			},
-			'Config\Service\PointOfSell' => function($sm) {
-				return new \Config\Service\PointOfSell($sm);
+			'Config\Service\PointOfSale' => function($sm) {
+				return new \Config\Service\PointOfSale($sm);
 			},
 			'Config\Service\Product' => function($sm) {
 				return new \Config\Service\Product($sm);

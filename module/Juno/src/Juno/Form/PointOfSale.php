@@ -2,23 +2,23 @@
 
 namespace Juno\Form;
 
-use Juno\Filter\WarehouseFilter;
+use Juno\Filter\PointOfSaleFilter;
 use Zend\Authentication\Adapter\DbTable;
 use Zend\Form\Form;
 use Zend\ServiceManager\ServiceLocatorInterface;
 
-class Warehouse extends Form {
+class PointOfSale extends Form {
 	/**
 	 * @param ServiceLocatorInterface $sm
 	 * @param string $action
 	 */
 	public function __construct($sm, $action) {
-		parent::__construct('warehouse');
+		parent::__construct('point-of-sale');
 
 		$this->setAttribute('action', $action);
 		$this->setAttribute('method', 'post');
-		$this->setAttribute('class', 'form-horizontal warehouse-form');
-		$this->setInputFilter(new WarehouseFilter());
+		$this->setAttribute('class', 'form-horizontal point-of-sale-form');
+		$this->setInputFilter(new PointOfSaleFilter());
 
 		$this->add([
 			'name' => 'name',

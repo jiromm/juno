@@ -15,7 +15,7 @@ $data = $this->data;
 ?>
 <div class="row">
 	<div class="col-xs-12">
-		<table class="table table-condensed table-striped table-hover">
+		<table class="table table-bordered table-condensed table-striped table-hover dataTables">
 			<thead>
 				<tr>
 					<th>login</th>
@@ -32,7 +32,7 @@ $data = $this->data;
 					<td><?php echo $item->getLogin(); ?></td>
 					<td><?php echo $item->getName(); ?></td>
 					<td><?php echo $item->getEmail(); ?></td>
-					<td><?php echo $item->getIsPrimary() ? '<span class="label label-success">yes</span>' : ''; ?></td>
+					<td><?php echo $item->getIsPrimary() ? '<i class="glyphicon glyphicon-ok-sign text-success"></i>' : ''; ?></td>
 					<td class="text-right">
 						<?php if ($item->getIsPrimary()) { ?>
 						<a href="<?php echo $this->url('user/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>

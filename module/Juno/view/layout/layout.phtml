@@ -19,6 +19,7 @@
 
         <!-- Scripts -->
         <?php echo $this->headScript()
+	        ->prependFile($this->basePath() . '/js/dataTables.bootstrap.js')
 	        ->prependFile($this->basePath() . '/js/jquery.dataTables.min.js')
 	        ->prependFile($this->basePath() . '/js/selectize.min.js')
 	        ->prependFile($this->basePath() . '/js/bootstrap.min.js')
@@ -45,7 +46,7 @@
                 <div class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
                         <li><a href="#">Products</a></li>
-                        <li><a href="#">Points of Sell</a></li>
+                        <li><a href="<?php echo $this->url('point-of-sale'); ?>">Points of Sell</a></li>
                         <li><a href="<?php echo $this->url('warehouse'); ?>">Warehouses</a></li>
                         <li><a href="#">Statistics</a></li>
                         <li><a href="#"><span class="label label-success">Make a Sale</span></a></li>

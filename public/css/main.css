@@ -62,3 +62,15 @@ body {
 	border-top-left-radius: 0;
 	border-top-right-radius: 0;
 }
+
+/**
+ * Datatables
+ */
+.dataTables_wrapper .dataTables_info {
+	clear: both;
+	float: left;
+	padding-top: 1.455em;
+}
+.dataTables_wrapper .pagination {
+	margin-top: 0.755em;
+}

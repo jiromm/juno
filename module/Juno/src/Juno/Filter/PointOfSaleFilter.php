@@ -4,7 +4,7 @@ namespace Juno\Filter;
 
 use Zend\InputFilter\InputFilter;
 
-class PointOfSaleWarehouseFilter extends InputFilter {
+class PointOfSaleFilter extends InputFilter {
 	public function __construct() {
 		$this->add([
 			'name' => 'name',
