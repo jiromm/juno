@@ -68,11 +68,15 @@ return array(
 
 			// Services
 			'ProductService' => 'Config\Service\Product',
+			'ProductTypeService' => 'Config\Service\ProductType',
 			'PointOfSaleService' => 'Config\Service\PointOfSale',
 			'WarehouseService' => 'Config\Service\Warehouse',
 			'UserService' => 'Config\Service\User',
 		),
 		'factories' => array(
+			'Config\Service\ProductType' => function($sm) {
+				return new \Config\Service\ProductType($sm);
+			},
 			'Config\Service\Warehouse' => function($sm) {
 				return new \Config\Service\Warehouse($sm);
 			},

@@ -3,6 +3,7 @@
 namespace Config\Library;
 
 use Zend\Authentication\AuthenticationService;
+use Zend\Http\Request;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\Mvc\Controller\PluginManager;
 use Zend\Mvc\MvcEvent;

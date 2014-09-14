@@ -1,0 +1,58 @@
+<?php
+
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['Product Types']
+]);
+$this->layout()->actions = '
+	<li><a href="' . $this->url('product/type/add') . '" class="btn btn-primary">Add Product Type</a></li>
+';
+$this->headTitle('Product Types');
+$this->layout()->pageTitle = 'Product Types';
+
+/**
+ * @var \Config\Entity\ProductType[]|\ArrayObject $data
+ */
+$data = $this->data;
+
+?>
+<div class="row">
+	<div class="col-xs-12">
+		<table class="table table-bordered table-condensed table-striped table-hover dataTables">
+			<thead>
+			<tr>
+				<th>Name</th>
+				<th class="no-sort"></th>
+			</tr>
+			</thead>
+			<tbody>
+			<?php if ($this->data->count()) { ?>
+				<?php foreach ($data as $item) { ?>
+					<tr>
+						<td><?php echo $item->getName(); ?></td>
+						<td class="text-right">
+							<div class="btn-group text-left">
+								<a href="<?php echo $this->url('product/type/manage', ['id' => $item->getId()]); ?>" class="btn btn-xs btn-primary">Manage</a>
+								<button type="button" class="btn btn-xs btn-primary dropdown-toggle" data-toggle="dropdown">
+									<span class="caret"></span>
+									<span class="sr-only">Toggle Dropdown</span>
+								</button>
+								<ul class="dropdown-menu" role="menu">
+									<li><a href="<?php echo $this->url('product/type/delete', ['id' => $item->getId()]); ?>">Delete</a></li>
+								</ul>
+							</div>
+						</td>
+					</tr>
+				<?php } ?>
+			<?php } else { ?>
+				<tr>
+					<td>
+						No product type found
+						<a href="<?php echo $this->url('product/type/add'); ?>">Add Product Type</a>
+					</td>
+					<td></td>
+				</tr>
+			<?php } ?>
+			</tbody>
+		</table>
+	</div>
+</div>

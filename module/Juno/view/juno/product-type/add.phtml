@@ -1,0 +1,28 @@
+<?php
+
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['Product Types', $this->url('product/type')],
+	['Add Product Type'],
+]);
+$this->layout()->actions = '<li><a href="' . $this->url('product/type') . '" class="btn btn-primary">Back</a></li>';
+$this->headTitle('Add Product Type');
+$this->layout()->pageTitle = 'Add Product Type';
+
+?>
+
+<?php echo $this->form()->openTag($this->form); ?>
+
+<div class="form-group">
+	<label for="name" class="col-sm-2 control-label">Name <?php echo $this->required(); ?></label>
+	<div class="col-sm-4">
+		<?php echo $this->formInput($this->form->get('name')); ?>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-2">
+		<?php echo $this->formSubmit($this->form->get('submit')); ?>
+	</div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

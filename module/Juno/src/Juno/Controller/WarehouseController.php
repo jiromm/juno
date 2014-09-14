@@ -22,7 +22,7 @@ class WarehouseController extends CommonController {
 		 * @var WarehouseService $service
 		 */
 		$service = $this->getServiceLocator()->get('WarehouseService');
-		$result = $service->getWarehouses();
+		$result = $service->getWarehouses($this->getCompanyId());
 
 		return new ViewModel([
 			'data' => $result,

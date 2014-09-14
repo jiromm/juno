@@ -178,6 +178,98 @@ return array(
 			        ),
 		        ),
 	        ),
+	        'product' => array(
+		        'type' => 'Literal',
+		        'options' => array(
+			        'route'    => '/product',
+			        'defaults' => array(
+				        'controller' => 'Juno\Controller\Product',
+				        'action'     => 'index',
+			        ),
+		        ),
+		        'may_terminate' => true,
+		        'child_routes' => array(
+			        'add' => array(
+				        'type'    => 'Literal',
+				        'options' => array(
+					        'route'    => '/add',
+					        'defaults' => array(
+						        'action' => 'add',
+					        ),
+				        ),
+			        ),
+			        'manage' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/manage/[:id]',
+					        'defaults' => array(
+						        'action' => 'manage',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+			        'delete' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/delete/[:id]',
+					        'defaults' => array(
+						        'action' => 'delete',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+			        'type' => array(
+				        'type'    => 'Literal',
+				        'options' => array(
+					        'route'    => '/type',
+					        'defaults' => array(
+						        'controller' => 'Juno\Controller\ProductType',
+						        'action' => 'index',
+					        ),
+				        ),
+				        'may_terminate' => true,
+				        'child_routes' => array(
+					        'add' => array(
+						        'type'    => 'Literal',
+						        'options' => array(
+							        'route'    => '/add',
+							        'defaults' => array(
+								        'action' => 'add',
+							        ),
+						        ),
+					        ),
+					        'manage' => array(
+						        'type'    => 'Segment',
+						        'options' => array(
+							        'route'    => '/manage/[:id]',
+							        'defaults' => array(
+								        'action' => 'manage',
+							        ),
+							        'constraints' => array(
+								        'id' => '[1-9][0-9]*',
+							        ),
+						        ),
+					        ),
+					        'delete' => array(
+						        'type'    => 'Segment',
+						        'options' => array(
+							        'route'    => '/delete/[:id]',
+							        'defaults' => array(
+								        'action' => 'delete',
+							        ),
+							        'constraints' => array(
+								        'id' => '[1-9][0-9]*',
+							        ),
+						        ),
+					        ),
+				        )
+			        ),
+		        ),
+	        ),
 	        'login' => array(
 		        'type' => 'Segment',
 		        'options' => array(
@@ -216,6 +308,7 @@ return array(
             'Juno\Controller\Warehouse' => 'Juno\Controller\WarehouseController',
             'Juno\Controller\PointOfSale' => 'Juno\Controller\PointOfSaleController',
             'Juno\Controller\Product' => 'Juno\Controller\ProductController',
+            'Juno\Controller\ProductType' => 'Juno\Controller\ProductTypeController',
         ),
 	    'factories' => array(
 		    'Juno\Controller\Auth' => 'Juno\Controller\AuthControllerFactory',

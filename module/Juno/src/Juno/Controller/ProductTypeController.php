@@ -3,14 +3,14 @@
 namespace Juno\Controller;
 
 use Config\Library\CommonController;
-use Config\Service\PointOfSale as PointOfSaleService;
-use Config\Mapper\PointOfSale as PointOfSaleMapper;
-use Config\Entity\PointOfSale as PointOfSaleEntity;
-use Juno\Form\PointOfSale as PointOfSaleForm;
+use Config\Service\ProductType as ProductTypeService;
+use Config\Mapper\ProductType as ProductTypeMapper;
+use Config\Entity\ProductType as ProductTypeEntity;
+use Juno\Form\ProductType as ProductTypeForm;
 use Zend\Http\Request;
 use Zend\View\Model\ViewModel;
 
-class PointOfSaleController extends CommonController {
+class ProductTypeController extends CommonController {
 	public function init() {
 		/**
 		 * @todo: security checks
@@ -19,10 +19,10 @@ class PointOfSaleController extends CommonController {
 
 	public function indexAction() {
 		/**
-		 * @var PointOfSaleService $service
+		 * @var ProductTypeService $service
 		 */
-		$service = $this->getServiceLocator()->get('PointOfSaleService');
-		$result = $service->getPointsOfSale($this->getCompanyId());
+		$service = $this->getServiceLocator()->get('ProductTypeService');
+		$result = $service->getWarehouses($this->getCompanyId());
 
 		return new ViewModel([
 			'data' => $result,
@@ -32,40 +32,39 @@ class PointOfSaleController extends CommonController {
 	public function addAction() {
 		/**
 		 * @var Request $request
-		 * @var PointOfSaleMapper $mapper
-		 * @var PointOfSaleEntity|bool $result
+		 * @var ProductTypeMapper $mapper
+		 * @var ProductTypeEntity|bool $result
 		 */
 		$request = $this->getRequest();
 
-		$mapper = $this->getServiceLocator()->get('PointOfSaleMapper');
+		$mapper = $this->getServiceLocator()->get('ProductTypeMapper');
 
-		$form = new PointOfSaleForm($this->getServiceLocator(), $this->url()->fromRoute('point-of-sale/add'));
+		$form = new ProductTypeForm($this->getServiceLocator(), $this->url()->fromRoute('product/type/add'));
 		$form->prepare();
 
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$entity = new PointOfSaleEntity();
+				$entity = new ProductTypeEntity();
 				$entity->setName($request->getPost('name'));
-				$entity->setAddress($request->getPost('address'));
 				$entity->setCompanyId($this->getCompanyId());
 
 				try {
 					$mapper->insert($entity);
-					$pointOfSaleId = $mapper->lastInsertValue;
+					$warehouseId = $mapper->lastInsertValue;
 
-					$this->redirect()->toRoute('point-of-sale/manage', ['id' => $pointOfSaleId]);
+					$this->redirect()->toRoute('product/type/manage', ['id' => $warehouseId]);
 					return $this->getResponse();
 				} catch (\Exception $ex) {
-					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
+					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!' . $ex->getMessage());
 				}
 			} else {
 				$this->flashMessenger()->addErrorMessage('Form is not valid!');
 				$form->populateValues($request->getPost());
 			}
 
-			$this->redirect()->toRoute('point-of-sale/add');
+			$this->redirect()->toRoute('product/type/add');
 		} else {
 			$form->populateValues(
 				$request->getPost()
@@ -81,19 +80,19 @@ class PointOfSaleController extends CommonController {
 	public function manageAction() {
 		/**
 		 * @var Request $request
-		 * @var PointOfSaleMapper $mapper
-		 * @var PointOfSaleEntity|bool $result
+		 * @var ProductTypeMapper $mapper
+		 * @var ProductTypeEntity|bool $result
 		 */
 		$request = $this->getRequest();
-		$pointOfSaleId = $this->params()->fromRoute('id');
+		$productTypeId = $this->params()->fromRoute('id');
 
-		$mapper = $this->getServiceLocator()->get('PointOfSaleMapper');
+		$mapper = $this->getServiceLocator()->get('ProductTypeMapper');
 		$result = $mapper->fetchOne([
-			'id' => $pointOfSaleId,
+			'id' => $productTypeId,
 		]);
 
-		$form = new PointOfSaleForm($this->getServiceLocator(), $this->url()->fromRoute('point-of-sale/manage', [
-			'id' => $pointOfSaleId,
+		$form = new ProductTypeForm($this->getServiceLocator(), $this->url()->fromRoute('product/type/manage', [
+			'id' => $productTypeId,
 		]));
 		$form->prepare();
 
@@ -101,23 +100,21 @@ class PointOfSaleController extends CommonController {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$entity = new PointOfSaleEntity();
+				$entity = new ProductTypeEntity();
 				$entity->setName($request->getPost('name'));
-				$entity->setAddress($request->getPost('address'));
 
 				try {
-					$mapper->update($entity, ['id' => $pointOfSaleId]);
+					$mapper->update($entity, ['id' => $productTypeId]);
 					$this->flashMessenger()->addSuccessMessage($request->getPost('name') . ' has been successfully modified!');
 				} catch (\Exception $ex) {
 					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
 				}
-
 			} else {
 				$this->flashMessenger()->addErrorMessage('Form is not valid!');
 				$form->populateValues($request->getPost());
 			}
 
-			$this->redirect()->toRoute('point-of-sale/manage', ['id' => $pointOfSaleId]);
+			$this->redirect()->toRoute('product/type/manage', ['id' => $productTypeId]);
 		} else {
 			$form->populateValues(
 				$result->exchangeArray()
@@ -126,24 +123,24 @@ class PointOfSaleController extends CommonController {
 
 		return new ViewModel([
 			'form' => $form,
-			'id' => $pointOfSaleId,
+			'id' => $productTypeId,
 		]);
 	}
 
 	public function deleteAction() {
 		/**
-		 * @var PointOfSaleMapper $mapper
+		 * @var ProductTypeMapper $mapper
 		 */
-		$mapper = $this->getServiceLocator()->get('PointOfSaleMapper');
+		$mapper = $this->getServiceLocator()->get('ProductTypeMapper');
 
 		try {
 			$mapper->delete(['id' => $this->params()->fromRoute('id')]);
-			$this->flashMessenger()->addSuccessMessage('Point of Sale has been successfully removed!');
+			$this->flashMessenger()->addSuccessMessage('Product Type has been successfully removed!');
 		} catch (\Exception $ex) {
 			$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
 		}
 
-		$this->redirect()->toRoute('point-of-sale');
+		$this->redirect()->toRoute('product/type');
 
 		return new ViewModel([
 			'id' => $this->params()->fromRoute('id'),

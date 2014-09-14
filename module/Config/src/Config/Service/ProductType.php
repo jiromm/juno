@@ -4,15 +4,15 @@
 namespace Config\Service;
 
 use Config\Library\GeneralServiceBase;
-use Config\Mapper\Warehouse as WarehouseMapper;
+use Config\Mapper\ProductType as ProductTypeMapper;
 use Zend\Debug\Debug;
 
-class Warehouse extends GeneralServiceBase {
+class ProductType extends GeneralServiceBase {
 	public function getWarehouses($companyId) {
 		/**
-		 * @var WarehouseMapper $mapper
+		 * @var ProductTypeMapper $mapper
 		 */
-		$mapper = $this->getServiceLocator()->get('WarehouseMapper');
+		$mapper = $this->getServiceLocator()->get('ProductTypeMapper');
 
 		return $mapper->fetchAll([
 			'company_id' => $companyId,

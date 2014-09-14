@@ -1,0 +1,15 @@
+<?php
+
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['Products']
+]);
+$this->layout()->actions = '
+	<li><a href="' . $this->url('product/add') . '" class="btn btn-primary">Add Product</a></li>
+	<li><a href="' . $this->url('product/type/add') . '" class="btn btn-primary">Add Product Type</a></li>
+	<li><a href="' . $this->url('product/type') . '" class="btn btn-primary">Manage Product Types</a></li>
+';
+$this->headTitle('Products');
+$this->layout()->pageTitle = 'Products';
+
+?>
+productr
