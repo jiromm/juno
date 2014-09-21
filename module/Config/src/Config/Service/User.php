@@ -9,15 +9,16 @@ use Zend\Debug\Debug;
 
 class User extends GeneralServiceBase {
 	/**
+	 * @param int $companyId
 	 * @return UserEntity[]|\ArrayObject
 	 */
-	public function getAllUsers() {
+	public function getCompanyUsers($companyId) {
 		/**
 		 * @var UserMapper $userMapper
 		 */
 		$userMapper = $this->getServiceLocator()->get('UserMapper');
 
-		return $userMapper->getAllUsers();
+		return $userMapper->getCompanyUsers($companyId);
 	}
 
 	/**

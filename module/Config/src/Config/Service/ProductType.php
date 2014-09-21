@@ -5,10 +5,15 @@ namespace Config\Service;
 
 use Config\Library\GeneralServiceBase;
 use Config\Mapper\ProductType as ProductTypeMapper;
+use Config\Entity\ProductType as ProductTypeEntity;
 use Zend\Debug\Debug;
 
 class ProductType extends GeneralServiceBase {
-	public function getWarehouses($companyId) {
+	/**
+	 * @param $companyId
+	 * @return ProductTypeEntity[]|\ArrayObject
+	 */
+	public function getCompanyProductTypes($companyId) {
 		/**
 		 * @var ProductTypeMapper $mapper
 		 */

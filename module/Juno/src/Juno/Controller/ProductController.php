@@ -2,13 +2,18 @@
 
 namespace Juno\Controller;
 
+use Config\Constant\DBTable;
 use Config\Library\CommonController;
 use Config\Service\Product as ProductService;
 use Config\Mapper\Product as ProductMapper;
+use Config\Mapper\RelProductPointOfSale as RelProductPointOfSaleMapper;
+use Config\Mapper\RelProductWarehouse as RelProductWarehouseMapper;
 use Config\Entity\Product as ProductEntity;
 use Juno\Form\ProductAdd as ProductAddForm;
+use Zend\Debug\Debug;
 use Zend\Http\Request;
 use Zend\View\Model\ViewModel;
+use Config\Entity;
 
 class ProductController extends CommonController {
 	public function init() {
@@ -19,13 +24,13 @@ class ProductController extends CommonController {
 
 	public function indexAction() {
 		/**
-		 * @var ProductService $mapper
+		 * @var ProductService $service
 		 */
 		$service = $this->getServiceLocator()->get('ProductService');
 		$result = $service->getProducts($this->getCompanyId());
 
 		return new ViewModel([
-			'data' => [],
+			'data' => $result,
 		]);
 	}
 
@@ -33,33 +38,69 @@ class ProductController extends CommonController {
 		/**
 		 * @var Request $request
 		 * @var ProductMapper $mapper
+		 * @var RelProductPointOfSaleMapper $relPOSMapper
+		 * @var RelProductWarehouseMapper $relWHMapper
 		 * @var ProductEntity|bool $result
 		 */
 		$request = $this->getRequest();
 		$mapper = $this->getServiceLocator()->get('ProductMapper');
 
-		$form = new ProductAddForm($this->getServiceLocator(), $this->url()->fromRoute('product/add'));
+		$form = new ProductAddForm($this->getServiceLocator(), $this->url()->fromRoute('product/add'), $this->getCompanyId());
 		$form->prepare();
 
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$entity = new ProductEntity();
-				$entity->setName($request->getPost('name'));
-				$entity->setQuantity($request->getPost('quantity'));
-				$entity->setProductTypeId($request->getPost('product_type_id'));
-				$entity->setDescription($request->getPost('description'));
+				$direction = $request->getPost('direction');
 
-				try {
-					$mapper->insert($entity);
-					$warehouseId = $mapper->lastInsertValue;
+				if (strpos($direction, '-') !== false) {
+					list($directionName, $directionId) = explode('-', $direction);
 
-					$this->redirect()->toRoute('product/manage', ['id' => $warehouseId]);
-					return $this->getResponse();
-				} catch (\Exception $ex) {
-					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
+					if (in_array($directionName, [DBTable::POINT_OF_SALE, DBTable::WAREHOUSE])) {
+						$entity = new ProductEntity();
+						$entity->setName($request->getPost('name'));
+						$entity->setQuantity($request->getPost('quantity'));
+						$entity->setProductTypeId($request->getPost('product_type_id'));
+
+						try {
+							$mapper->beginTransaction();
+
+							$mapper->insert($entity);
+							$productId = $mapper->lastInsertValue;
+
+							if ($directionName == DBTable::POINT_OF_SALE) {
+								$relPOSMapper = $this->getServiceLocator()->get('RelProductPointOfSaleMapper');
+
+								$relPOSEntity = new Entity\RelProductPointOfSale();
+								$relPOSEntity->setPointOfSaleId($directionId);
+								$relPOSEntity->setProductId($productId);
+
+								$relPOSMapper->insert($relPOSEntity);
+							} else {
+								$relWHMapper = $this->getServiceLocator()->get('RelProductWarehouseMapper');
+
+								$relWHEntity = new Entity\RelProductWarehouse();
+								$relWHEntity->setWarehouseId($directionId);
+								$relWHEntity->setProductId($productId);
+
+								$relWHMapper->insert($relWHEntity);
+							}
+
+							$mapper->commit();
+
+							$this->redirect()->toRoute('product/manage', ['id' => $productId]);
+
+							return $this->getResponse();
+						} catch (\Exception $ex) {
+							$mapper->rollback();
+
+							$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
+						}
+					}
 				}
+
+				$this->redirect()->toRoute('home');
 			} else {
 				$this->flashMessenger()->addErrorMessage('Form is not valid!');
 				$form->populateValues($request->getPost());
@@ -82,7 +123,7 @@ class ProductController extends CommonController {
 		/**
 		 * @var Request $request
 		 * @var ProductMapper $mapper
-		 * @var WarehouseEntity|bool $result
+		 * @var ProductEntity|bool $result
 		 */
 		$request = $this->getRequest();
 		$warehouseId = $this->params()->fromRoute('id');

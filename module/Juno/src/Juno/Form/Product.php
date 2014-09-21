@@ -2,6 +2,7 @@
 
 namespace Juno\Form;
 
+use Config\Service\ProductType as ProductTypeService;
 use Juno\Filter\ProductFilter;
 use Zend\Authentication\Adapter\DbTable;
 use Zend\Form\Form;
@@ -55,7 +56,7 @@ class Product extends Form {
 				'id' => 'product_type_id',
 			],
 			'options' => [
-				'value_options' => $this->getDirections($sm),
+				'value_options' => $this->getDirections($sm, $companyId),
 			],
 		]);
 
@@ -69,7 +70,25 @@ class Product extends Form {
 		]);
 	}
 
-	public function getDirections($sm) {
+	/**
+	 * @param ServiceLocatorInterface $sm
+	 * @param int $companyId
+	 * @return array
+	 */
+	public function getDirections($sm, $companyId) {
+		/**
+		 * @var ProductTypeService $productTypeservice
+		 */
+		$productTypeservice = $sm->get('ProductTypeService');
+		$productTypes = $productTypeservice->getCompanyProductTypes($companyId);
+		$result = [];
 
+		if ($productTypes->count()) {
+			foreach ($productTypes as $productType) {
+				$result[$productType->getId()] = $productType->getName();
+			}
+		}
+
+		return $result;
 	}
 }

@@ -25,7 +25,7 @@ class UserController extends CommonController {
 	     * @var UserService $service
 	     */
 	    $service = $this->getServiceLocator()->get('UserService');
-	    $result = $service->getAllUsers();
+	    $result = $service->getCompanyUsers($this->getCompanyId());
 
 	    return new ViewModel([
 		    'data' => $result,

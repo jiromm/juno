@@ -44,4 +44,10 @@ class Utils {
 	public static function verify($password, $hashedPassword) {
 		return crypt($password, $hashedPassword) == $hashedPassword;
 	}
+
+	public static function asDisplayName($string) {
+		return ucfirst(
+			str_replace('_', ' ', $string)
+		);
+	}
 }

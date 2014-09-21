@@ -22,7 +22,7 @@ class ProductTypeController extends CommonController {
 		 * @var ProductTypeService $service
 		 */
 		$service = $this->getServiceLocator()->get('ProductTypeService');
-		$result = $service->getWarehouses($this->getCompanyId());
+		$result = $service->getCompanyProductTypes($this->getCompanyId());
 
 		return new ViewModel([
 			'data' => $result,
