@@ -10,5 +10,15 @@ class ProductTypeFilter extends InputFilter {
 			'name' => 'name',
 			'required' => true,
 		]);
+
+		$this->add([
+			'name' => 'property[]',
+			'required' => false,
+		]);
+
+		$this->add([
+			'name' => 'property_type[]',
+			'required' => false,
+		]);
 	}
 }

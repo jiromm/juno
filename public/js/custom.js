@@ -9,6 +9,10 @@ $(function() {
 		plugins: ['remove_button']
 	});
 
+	$('.selectize-create').selectize({
+		create: true
+	});
+
 	var dt = $('.dataTables'),
 		lastIndex = dt.find('th').length - 1,
 		dto = dt.dataTable({

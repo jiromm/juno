@@ -2,17 +2,19 @@
 
 namespace Juno\Form;
 
-use Juno\Filter\ProductTypeFilter;
-use Zend\Authentication\Adapter\DbTable;
-use Zend\Form\Form;
+use Config\Mapper\PropertyType as PropertyTypeMapper;
 use Zend\ServiceManager\ServiceLocatorInterface;
+use Zend\Authentication\Adapter\DbTable;
+use Juno\Filter\ProductTypeFilter;
+use Zend\Form\Form;
 
 class ProductType extends Form {
 	/**
 	 * @param ServiceLocatorInterface $sm
 	 * @param string $action
+	 * @param int $companyId
 	 */
-	public function __construct($sm, $action) {
+	public function __construct($sm, $action, $companyId) {
 		parent::__construct('product-type');
 
 		$this->setAttribute('action', $action);
@@ -32,6 +34,25 @@ class ProductType extends Form {
 		]);
 
 		$this->add([
+			'name' => 'property[]',
+			'attributes' => [
+				'type' => 'text',
+				'class' => 'property form-control',
+			],
+		]);
+
+		$this->add([
+			'name' => 'property_type[]',
+			'type' => 'Zend\Form\Element\Select',
+			'attributes' => [
+				'class' => 'selectize-create',
+			],
+			'options' => [
+				'value_options' => $this->getPropertyTypes($sm, $companyId),
+			],
+		]);
+
+		$this->add([
 			'name' => 'submit',
 			'attributes' => [
 				'type' => 'submit',
@@ -39,5 +60,27 @@ class ProductType extends Form {
 				'class' => 'btn btn-lg btn-primary btn-block',
 			],
 		]);
+	}
+
+	/**
+	 * @param ServiceLocatorInterface $sm
+	 * @param int $companyId
+	 * @return array
+	 */
+	private function getPropertyTypes($sm, $companyId) {
+		/**
+		 * @var PropertyTypeMapper $mapper
+		 */
+		$mapper = $sm->get('PropertyTypeMapper');
+		$propertyTypes = $mapper->getPropertyTypes($companyId);
+		$propertyTypeList = [];
+
+		if ($propertyTypes->count()) {
+			foreach ($propertyTypes as $propertyType) {
+				$propertyTypeList[$propertyType->getId()] = $propertyType->getName();
+			}
+		}
+
+		return $propertyTypeList;
 	}
 }
