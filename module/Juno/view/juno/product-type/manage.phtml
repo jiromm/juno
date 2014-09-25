@@ -12,12 +12,32 @@ $this->layout()->pageTitle = $this->form->get('name')->getValue();
 
 <?php echo $this->form()->openTag($this->form); ?>
 
-<div class="form-group">
-	<label for="name" class="col-sm-2 control-label">Name <?php echo $this->required(); ?></label>
-	<div class="col-sm-4">
-		<?php echo $this->formInput($this->form->get('name')); ?>
+<fieldset>
+	<legend>General</legend>
+
+	<div class="form-group">
+		<label for="name" class="col-sm-2 control-label">Name <?php echo $this->required(); ?></label>
+		<div class="col-sm-4">
+			<?php echo $this->formInput($this->form->get('name')); ?>
+		</div>
 	</div>
-</div>
+</fieldset>
+
+<fieldset>
+	<legend>Properties</legend>
+
+	<?php for ($i = 0; $i < \Config\Constant\Common::PROPERTY_TYPE_COUNT; $i++) { ?>
+		<div class="form-group">
+			<label for="name" class="col-sm-2 control-label">Property <span class="item">#<?php echo $i + 1; ?></span></label>
+			<div class="col-sm-3">
+				<?php echo $this->formInput($this->form->get("property[{$i}]")); ?>
+			</div>
+			<div class="col-sm-2">
+				<?php echo $this->formSelect($this->form->get("property_type[{$i}]")); ?>
+			</div>
+		</div>
+	<?php } ?>
+</fieldset>
 
 <div class="form-group">
 	<div class="col-sm-offset-2 col-sm-2">

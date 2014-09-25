@@ -2,6 +2,7 @@
 
 namespace Juno\Controller;
 
+use Config\Constant\Common;
 use Config\Library\CommonController;
 use Config\Service\ProductType as ProductTypeService;
 use Config\Mapper\Property as PropertyMapper;
@@ -42,7 +43,7 @@ class ProductTypeController extends CommonController {
 		 * @var ProductTypeMapper $productTypeMapper
 		 * @var PropertyMapper $propertyMapper
 		 * @var PropertyTypeMapper $propertyTypeMapper
-		 * @var RelProductTypePropertyMapper $productTypeMapper
+		 * @var RelProductTypePropertyMapper $relProductTypePropertyMapper
 		 */
 		$request = $this->getRequest();
 
@@ -138,14 +139,22 @@ class ProductTypeController extends CommonController {
 	public function manageAction() {
 		/**
 		 * @var Request $request
-		 * @var ProductTypeMapper $mapper
+		 * @var ProductTypeMapper $productTypeMapper
+		 * @var PropertyMapper $propertyMapper
+		 * @var PropertyTypeMapper $propertyTypeMapper
+		 * @var RelProductTypePropertyMapper $relProductTypePropertyMapper
 		 * @var ProductTypeEntity|bool $result
 		 */
 		$request = $this->getRequest();
+
+		$productTypeMapper = $this->getServiceLocator()->get('ProductTypeMapper');
+		$propertyMapper = $this->getServiceLocator()->get('PropertyMapper');
+		$propertyTypeMapper = $this->getServiceLocator()->get('PropertyTypeMapper');
+		$relProductTypePropertyMapper = $this->getServiceLocator()->get('RelProductTypePropertyMapper');
+
 		$productTypeId = $this->params()->fromRoute('id');
 
-		$mapper = $this->getServiceLocator()->get('ProductTypeMapper');
-		$result = $mapper->fetchOne([
+		$result = $productTypeMapper->fetchOne([
 			'id' => $productTypeId,
 		]);
 
@@ -158,14 +167,67 @@ class ProductTypeController extends CommonController {
 			$form->setData($request->getPost());
 
 			if ($form->isValid()) {
-				$entity = new ProductTypeEntity();
-				$entity->setName($request->getPost('name'));
+				$productTypeEntity = new ProductTypeEntity();
+				$productTypeEntity->setName($request->getPost('name'));
 
 				try {
-					$mapper->update($entity, ['id' => $productTypeId]);
-					$this->flashMessenger()->addSuccessMessage($request->getPost('name') . ' has been successfully modified!');
+					$productTypeMapper->beginTransaction();
+
+					$productTypeMapper->update($productTypeEntity, ['id' => $productTypeId]);
+
+					$propertyTypes = $request->getPost('property_type');
+
+					/**
+					 * @todo: There we need to delete also unused properties of selected product type
+					 */
+					$relProductTypePropertyMapper->delete(['product_type_id' => $productTypeId]);
+
+					foreach ($request->getPost('property') as $index => $property) {
+						if (empty($property)) {
+							continue;
+						}
+
+						// Property Type
+						if (!is_numeric($propertyTypes[$index])) {
+							$propertyTypeResult = $propertyTypeMapper->getByName(trim($propertyTypes[$index]));
+
+							if (!$propertyTypeResult) {
+								$propertyTypeEntity = new PropertyTypeEntity();
+								$propertyTypeEntity->setCompanyId($this->getCompanyId());
+								$propertyTypeEntity->setName($propertyTypes[$index]);
+
+								$propertyTypeMapper->insert($propertyTypeEntity);
+								$propertyTypeId = $propertyTypeMapper->lastInsertValue;
+							} else {
+								$propertyTypeId = $propertyTypeResult->getId();
+							}
+						} else {
+							$propertyTypeId = $propertyTypes[$index];
+						}
+
+						// Property
+						$propertyEntity = new PropertyEntity();
+						$propertyEntity->setName($property);
+						$propertyEntity->setPropertyTypeId($propertyTypeId);
+
+						$propertyMapper->insert($propertyEntity);
+						$propertyId = $propertyMapper->lastInsertValue;
+
+						// Rel Product Type & Property
+						$relProductTypePropertyEntity = new RelProductTypePropertyEntity();
+						$relProductTypePropertyEntity->setProductTypeId($productTypeId);
+						$relProductTypePropertyEntity->setPropertyId($propertyId);
+
+						$relProductTypePropertyMapper->insert($relProductTypePropertyEntity);
+					}
+
+					$productTypeMapper->commit();
+
+					$this->redirect()->toRoute('product/type/manage', ['id' => $productTypeId]);
+					return $this->getResponse();
 				} catch (\Exception $ex) {
-					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later!');
+					$productTypeMapper->rollback();
+					$this->flashMessenger()->addErrorMessage('Something went wrong. Please try again later! ' . $ex->getMessage());
 				}
 			} else {
 				$this->flashMessenger()->addErrorMessage('Form is not valid!');
@@ -174,6 +236,15 @@ class ProductTypeController extends CommonController {
 
 			$this->redirect()->toRoute('product/type/manage', ['id' => $productTypeId]);
 		} else {
+			$properties = $propertyMapper->getCompanyProperties($productTypeId);
+			$i = 0;
+
+			foreach ($properties as $property) {
+				$form->get("property[{$i}]")->setValue($property->getName());
+				$form->get("property_type[{$i}]")->setValue($property->getPropertyTypeId());
+				$i++;
+			}
+
 			$form->populateValues(
 				$result->exchangeArray()
 			);
