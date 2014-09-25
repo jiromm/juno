@@ -270,6 +270,15 @@ return array(
 			        ),
 		        ),
 	        ),
+	        'settings' => array(
+		        'type' => 'Literal',
+		        'options' => array(
+			        'route'    => '/settings',
+			        'defaults' => array(
+				        'controller' => 'Juno\Controller\Settings',
+			        ),
+		        ),
+	        ),
 	        'login' => array(
 		        'type' => 'Segment',
 		        'options' => array(
