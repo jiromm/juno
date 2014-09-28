@@ -67,6 +67,7 @@ return array(
 			'UserAdminMapper' => 'Config\Mapper\UserAdmin',
 
 			// Services
+			'PropertyService' => 'Config\Service\Property',
 			'ProductService' => 'Config\Service\Product',
 			'ProductTypeService' => 'Config\Service\ProductType',
 			'PointOfSaleService' => 'Config\Service\PointOfSale',
@@ -74,6 +75,9 @@ return array(
 			'UserService' => 'Config\Service\User',
 		),
 		'factories' => array(
+			'Config\Service\Property' => function($sm) {
+				return new \Config\Service\Property($sm);
+			},
 			'Config\Service\ProductType' => function($sm) {
 				return new \Config\Service\ProductType($sm);
 			},

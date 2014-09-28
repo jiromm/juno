@@ -2,6 +2,7 @@
 
 namespace Juno\Form;
 
+use Config\Constant\Common;
 use Config\Service\ProductType as ProductTypeService;
 use Juno\Filter\ProductFilter;
 use Zend\Authentication\Adapter\DbTable;
@@ -32,6 +33,7 @@ class Product extends Form {
 				'required' => 'required',
 			],
 		]);
+
 		$this->add([
 			'name' => 'quantity',
 			'attributes' => [
@@ -40,6 +42,7 @@ class Product extends Form {
 				'id' => 'quantity',
 			],
 		]);
+
 		$this->add([
 			'name' => 'description',
 			'type' => 'Zend\Form\Element\Textarea',
@@ -48,6 +51,7 @@ class Product extends Form {
 				'id' => 'description',
 			],
 		]);
+
 		$this->add([
 			'name' => 'product_type_id',
 			'type' => 'Zend\Form\Element\Select',
@@ -68,6 +72,17 @@ class Product extends Form {
 				'class' => 'btn btn-lg btn-primary btn-block',
 			],
 		]);
+
+		for ($i = 1; $i <= Common::PROPERTY_TYPE_COUNT; $i++) {
+			$this->add([
+				'name' => 'property' . $i,
+				'attributes' => [
+					'type' => 'text',
+					'class' => 'form-control',
+					'id' => 'property' . $i,
+				],
+			]);
+		}
 	}
 
 	/**

@@ -236,7 +236,7 @@ class ProductTypeController extends CommonController {
 
 			$this->redirect()->toRoute('product/type/manage', ['id' => $productTypeId]);
 		} else {
-			$properties = $propertyMapper->getCompanyProperties($productTypeId);
+			$properties = $propertyMapper->getProductTypeProperties($productTypeId);
 			$i = 0;
 
 			foreach ($properties as $property) {

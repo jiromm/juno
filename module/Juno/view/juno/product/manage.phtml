@@ -2,16 +2,13 @@
 
 $this->layout()->breadcrumb = $this->breadcrumb([
 	['Products', $this->url('product')],
-	['Add Product'],
+	['Manage Product'],
 ]);
 $this->layout()->actions = '<li><a href="' . $this->url('product') . '" class="btn btn-primary">Back</a></li>';
-$this->headTitle('Add Product');
-$this->layout()->pageTitle = 'Add Product';
+$this->headTitle('Manage Product');
+$this->layout()->pageTitle = 'Manage Product';
 
-/**
- * @var array $companyProperties
- */
-$companyProperties = $this->companyProperties;
+$productProperties = $this->productProperties;
 
 ?>
 
@@ -33,30 +30,14 @@ $companyProperties = $this->companyProperties;
 			<?php echo $this->formInput($this->form->get('quantity')); ?>
 		</div>
 	</div>
-
-	<div class="form-group">
-		<label for="product_type_id" class="col-sm-2 control-label">Product Type <?php echo $this->required(); ?></label>
-		<div class="col-sm-3">
-			<?php echo $this->formSelect($this->form->get('product_type_id')); ?>
-		</div>
-	</div>
-
-	<div class="form-group">
-		<label for="direction" class="col-sm-2 control-label">Direction <?php echo $this->required(); ?></label>
-		<div class="col-sm-3">
-			<?php echo $this->formSelect($this->form->get('direction')); ?>
-		</div>
-	</div>
 </fieldset>
 
-<?php if (count($companyProperties)) { ?>
-<fieldset>
-	<legend>Properties</legend>
+<?php if (count($productProperties)) { ?>
+	<fieldset>
+		<legend>Properties</legend>
 
-	<?php foreach ($companyProperties as $productTypeId => $propertyList) { ?>
 		<?php $index = 1; ?>
-		<div class="product-types product-type-<?php echo $productTypeId; ?> hidden">
-	    <?php foreach ($propertyList as $property) { ?>
+		<?php foreach ($productProperties as $property) { ?>
 			<div class="form-group">
 				<label for="property<?php echo $index; ?>" class="col-sm-2 control-label"><?php echo $property['name']; ?></label>
 				<div class="col-sm-2">
@@ -66,11 +47,9 @@ $companyProperties = $this->companyProperties;
 					</div>
 				</div>
 			</div>
-		    <?php $index++; ?>
-	    <?php } ?>
-		</div>
-	<?php } ?>
-</fieldset>
+			<?php $index++; ?>
+		<?php } ?>
+	</fieldset>
 <?php } ?>
 
 <div class="form-group">
