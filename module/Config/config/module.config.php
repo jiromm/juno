@@ -48,6 +48,7 @@ return array(
 			'adapter' => 'Zend\Db\Adapter\Adapter',
 
 			// Mappers
+			'SaleMapper' => 'Config\Mapper\Sale',
 			'WarehouseMapper' => 'Config\Mapper\Warehouse',
 			'RelProductWarehouseMapper' => 'Config\Mapper\RelProductWarehouse',
 			'RelProductTypePropertyMapper' => 'Config\Mapper\RelProductTypeProperty',
@@ -105,6 +106,12 @@ return array(
 					'password' => $dbParams['password'],
 					'hostname' => $dbParams['hostname'],
 				]);
+			},
+			'Config\Mapper\Sale' => function($sm) {
+				return new \Config\Mapper\Sale(
+					$sm->get('adapter'),
+					new \Config\Entity\Sale()
+				);
 			},
 			'Config\Mapper\Warehouse' => function($sm) {
 				return new \Config\Mapper\Warehouse(

@@ -20,4 +20,5 @@ class DBTable {
 	const REL_PRODUCT_TYPE_PROPERTY = 'rel_product_type_property';
 	const REL_PRODUCT_WAREHOUSE = 'rel_product_warehouse';
 	const WAREHOUSE = 'warehouse';
+	const SALE = 'sale';
 }
