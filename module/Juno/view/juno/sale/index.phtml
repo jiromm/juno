@@ -1,0 +1,100 @@
+<?php
+
+$this->layout()->breadcrumb = $this->breadcrumb([
+	['Make a Sale'],
+]);
+$this->headTitle('Make a Sale');
+$this->layout()->pageTitle = 'Make a Sale';
+
+?>
+
+<?php echo $this->form()->openTag($this->form); ?>
+
+<div class="form-group">
+	<label for="name" class="col-sm-2 control-label">Direction</label>
+	<div class="col-sm-3">
+		<?php echo $this->formSelect($this->form->get('direction')); ?>
+	</div>
+</div>
+
+<div class="form-group">
+	<label for="email" class="col-sm-2 control-label">Products</label>
+
+	<div class="col-sm-3">
+		<?php echo $this->formSelect($this->form->get('product_id[]')); ?>
+	</div>
+	<div class="col-sm-2">
+		<div class="input-group">
+			<span class="input-group-addon">50</span>
+			<?php echo $this->formInput($this->form->get('quantity[]')); ?>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-3">
+		<?php echo $this->formSelect($this->form->get('product_id[]')); ?>
+	</div>
+	<div class="col-sm-2">
+		<div class="input-group">
+			<span class="input-group-addon">50</span>
+			<?php echo $this->formInput($this->form->get('quantity[]')); ?>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-3">
+		<?php echo $this->formSelect($this->form->get('product_id[]')); ?>
+	</div>
+	<div class="col-sm-2">
+		<div class="input-group">
+			<span class="input-group-addon">50</span>
+			<?php echo $this->formInput($this->form->get('quantity[]')); ?>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-3">
+		<?php echo $this->formSelect($this->form->get('product_id[]')); ?>
+	</div>
+	<div class="col-sm-2">
+		<div class="input-group">
+			<span class="input-group-addon">50</span>
+			<?php echo $this->formInput($this->form->get('quantity[]')); ?>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-3">
+		<?php echo $this->formSelect($this->form->get('product_id[]')); ?>
+	</div>
+	<div class="col-sm-2">
+		<div class="input-group">
+			<span class="input-group-addon">50</span>
+			<?php echo $this->formInput($this->form->get('quantity[]')); ?>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-3">
+		<?php echo $this->formSelect($this->form->get('product_id[]')); ?>
+	</div>
+	<div class="col-sm-2">
+		<div class="input-group">
+			<span class="input-group-addon">50</span>
+			<?php echo $this->formInput($this->form->get('quantity[]')); ?>
+		</div>
+	</div>
+</div>
+
+<div class="form-group">
+	<div class="col-sm-offset-2 col-sm-2">
+		<?php echo $this->formSubmit($this->form->get('submit')); ?>
+	</div>
+</div>
+
+<?php echo $this->form()->closeTag(); ?>

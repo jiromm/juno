@@ -48,34 +48,50 @@ return array(
 			'adapter' => 'Zend\Db\Adapter\Adapter',
 
 			// Mappers
-			'SaleMapper' => 'Config\Mapper\Sale',
-			'WarehouseMapper' => 'Config\Mapper\Warehouse',
-			'RelProductWarehouseMapper' => 'Config\Mapper\RelProductWarehouse',
 			'RelProductTypePropertyMapper' => 'Config\Mapper\RelProductTypeProperty',
 			'RelProductPointOfSaleMapper' => 'Config\Mapper\RelProductPointOfSale',
-			'PropertyTypeMapper' => 'Config\Mapper\PropertyType',
-			'PropertyMapper' => 'Config\Mapper\Property',
-			'ProductTypeMapper' => 'Config\Mapper\ProductType',
-			'ProductMapper' => 'Config\Mapper\Product',
-			'PointOfSaleMapper' => 'Config\Mapper\PointOfSale',
-			'CompanyMapper' => 'Config\Mapper\Company',
-			'FeatureMapper' => 'Config\Mapper\Feature',
-			'PermissionMapper' => 'Config\Mapper\Permission',
-			'PlanMapper' => 'Config\Mapper\Plan',
+			'RelProductWarehouseMapper' => 'Config\Mapper\RelProductWarehouse',
 			'RelCompanyFeatureMapper' => 'Config\Mapper\RelCompanyFeature',
 			'RelUserPermissionMapper' => 'Config\Mapper\RelUserPermission',
-			'UserMapper' => 'Config\Mapper\User',
+			'RelSaleProductMapper' => 'Config\Mapper\RelSaleProduct',
+			'PropertyTypeMapper' => 'Config\Mapper\PropertyType',
+			'ProductTypeMapper' => 'Config\Mapper\ProductType',
+			'PointOfSaleMapper' => 'Config\Mapper\PointOfSale',
+			'PermissionMapper' => 'Config\Mapper\Permission',
 			'UserAdminMapper' => 'Config\Mapper\UserAdmin',
+			'WarehouseMapper' => 'Config\Mapper\Warehouse',
+			'PropertyMapper' => 'Config\Mapper\Property',
+			'ProductMapper' => 'Config\Mapper\Product',
+			'CompanyMapper' => 'Config\Mapper\Company',
+			'FeatureMapper' => 'Config\Mapper\Feature',
+			'PlanMapper' => 'Config\Mapper\Plan',
+			'SaleMapper' => 'Config\Mapper\Sale',
+			'UserMapper' => 'Config\Mapper\User',
 
 			// Services
-			'PropertyService' => 'Config\Service\Property',
-			'ProductService' => 'Config\Service\Product',
 			'ProductTypeService' => 'Config\Service\ProductType',
 			'PointOfSaleService' => 'Config\Service\PointOfSale',
 			'WarehouseService' => 'Config\Service\Warehouse',
+			'PropertyService' => 'Config\Service\Property',
+			'ProductService' => 'Config\Service\Product',
 			'UserService' => 'Config\Service\User',
 		),
 		'factories' => array(
+			'Zend\Db\Adapter\Adapter' => function($sm) {
+				$config = $sm->get('Config');
+				$dbParams = $config['dbParams'];
+
+				return new Zend\Db\Adapter\Adapter([
+					'driver' => 'pdo',
+					'dsn' => 'mysql:dbname=' . $dbParams['database'] . ';host=' . $dbParams['hostname'],
+					'database' => $dbParams['database'],
+					'username' => $dbParams['username'],
+					'password' => $dbParams['password'],
+					'hostname' => $dbParams['hostname'],
+				]);
+			},
+
+			// Service
 			'Config\Service\Property' => function($sm) {
 				return new \Config\Service\Property($sm);
 			},
@@ -94,18 +110,13 @@ return array(
 			'Config\Service\User' => function($sm) {
 				return new \Config\Service\User($sm);
 			},
-			'Zend\Db\Adapter\Adapter' => function($sm) {
-				$config = $sm->get('Config');
-				$dbParams = $config['dbParams'];
 
-				return new Zend\Db\Adapter\Adapter([
-					'driver' => 'pdo',
-					'dsn' => 'mysql:dbname=' . $dbParams['database'] . ';host=' . $dbParams['hostname'],
-					'database' => $dbParams['database'],
-					'username' => $dbParams['username'],
-					'password' => $dbParams['password'],
-					'hostname' => $dbParams['hostname'],
-				]);
+			// Mappers
+			'Config\Mapper\RelSaleProduct' => function($sm) {
+				return new \Config\Mapper\RelSaleProduct(
+					$sm->get('adapter'),
+					new \Config\Entity\RelSaleProduct()
+				);
 			},
 			'Config\Mapper\Sale' => function($sm) {
 				return new \Config\Mapper\Sale(

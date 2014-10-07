@@ -8,7 +8,6 @@ class Sale extends EntityBase {
 	protected $id;
 	protected $company_id;
 	protected $user_id;
-	protected $product_id;
 	protected $quantity;
 	protected $timestamp;
 
@@ -26,14 +25,6 @@ class Sale extends EntityBase {
 
 	public function getCompanyId() {
 		return $this->company_id;
-	}
-
-	public function setProductId($product_id) {
-		$this->product_id = $product_id;
-	}
-
-	public function getProductId() {
-		return $this->product_id;
 	}
 
 	public function setQuantity($quantity) {

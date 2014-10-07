@@ -94,10 +94,6 @@ class UserController extends CommonController {
 			}
 
 			$this->redirect()->toRoute('user/add');
-		} else {
-			$form->populateValues(
-				$request->getPost()
-			);
 		}
 
 		return new ViewModel([

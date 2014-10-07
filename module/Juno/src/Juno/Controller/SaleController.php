@@ -5,13 +5,9 @@ namespace Juno\Controller;
 use Config\Constant\Common;
 use Config\Constant\DBTable;
 use Config\Library\CommonController;
-use Config\Service\Property as PropertyService;
 use Config\Mapper\Sale as SaleMapper;
-use Config\Mapper\RelProductPointOfSale as RelProductPointOfSaleMapper;
-use Config\Mapper\RelProductWarehouse as RelProductWarehouseMapper;
 use Config\Entity\Product as ProductEntity;
-use Juno\Form\ProductAdd as ProductAddForm;
-use Juno\Form\Product as ProductManageForm;
+use Juno\Form\Sale as SaleForm;
 use Zend\Debug\Debug;
 use Zend\Http\Request;
 use Zend\View\Model\ViewModel;
@@ -26,33 +22,14 @@ class SaleController extends CommonController {
 
 	public function indexAction() {
 		/**
+		 * @var Request $request
 		 * @var SaleMapper $mapper
 		 */
-		$mapper = $this->getServiceLocator()->get('SaleMapper');
-		$result = $mapper->fetchAll();
-
-		return new ViewModel([
-			'data' => $result,
-		]);
-	}
-
-	public function addAction() {
-		/**
-		 * @var Request $request
-		 * @var ProductMapper $mapper
-		 * @var RelProductPointOfSaleMapper $relPOSMapper
-		 * @var RelProductWarehouseMapper $relWHMapper
-		 * @var PropertyService $propertyService
-		 * @var ProductEntity|bool $result
-		 */
 		$request = $this->getRequest();
-		$mapper = $this->getServiceLocator()->get('ProductMapper');
-		$propertyService = $this->getServiceLocator()->get('PropertyService');
+		$mapper = $this->getServiceLocator()->get('SaleMapper');
 
-		$form = new ProductAddForm($this->getServiceLocator(), $this->url()->fromRoute('product/add'), $this->getCompanyId());
+		$form = new SaleForm($this->getServiceLocator(), $this->url()->fromRoute('sale'), $this->getCompanyId());
 		$form->prepare();
-
-		$companyProperties = $propertyService->getCompanyProperties($this->getCompanyId());
 
 		if ($request->isPost()) {
 			$form->setData($request->getPost());
@@ -122,15 +99,10 @@ class SaleController extends CommonController {
 			}
 
 			$this->redirect()->toRoute('product/add');
-		} else {
-			$form->populateValues(
-				$request->getPost()
-			);
 		}
 
 		return new ViewModel([
 			'form' => $form,
-			'companyProperties' => $companyProperties,
 			'error' => isset($error) ? $error : false,
 		]);
 	}

@@ -5,11 +5,16 @@ namespace Config\Service;
 
 use Config\Helper\Utils;
 use Config\Library\GeneralServiceBase;
+use Config\Entity\Product as ProductEntity;
 use Config\Mapper\Product as ProductMapper;
 use Config\Mapper\PointOfSale as PointOfSaleMapper;
 use Zend\Debug\Debug;
 
 class Product extends GeneralServiceBase {
+	/**
+	 * @param int $companyId
+	 * @return ProductEntity[]|\ArrayObject
+	 */
 	public function getProducts($companyId) {
 		/**
 		 * @var ProductMapper $mapper
@@ -17,6 +22,19 @@ class Product extends GeneralServiceBase {
 		$mapper = $this->getServiceLocator()->get('ProductMapper');
 
 		return $mapper->getCompanyProducts($companyId);
+	}
+
+	public function getCompanyProducts($companyId) {
+		$productEntities = $this->getProducts($companyId);
+		$productList = [];
+
+		if ($productEntities->count()) {
+			foreach ($productEntities as $productEntity) {
+				$productList[$productEntity->getId()] = $productEntity->getName();
+			}
+		}
+
+		return $productList;
 	}
 
 	public function getCompanyDirections($companyId) {

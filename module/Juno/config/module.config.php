@@ -270,6 +270,43 @@ return array(
 			        ),
 		        ),
 	        ),
+	        'sale' => array(
+		        'type' => 'Literal',
+		        'options' => array(
+			        'route'    => '/sale',
+			        'defaults' => array(
+				        'controller' => 'Juno\Controller\Sale',
+				        'action'     => 'index',
+			        ),
+		        ),
+		        'may_terminate' => true,
+		        'child_routes' => array(
+			        'manage' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/manage/[:id]',
+					        'defaults' => array(
+						        'action' => 'manage',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+			        'delete' => array(
+				        'type'    => 'Segment',
+				        'options' => array(
+					        'route'    => '/delete/[:id]',
+					        'defaults' => array(
+						        'action' => 'delete',
+					        ),
+					        'constraints' => array(
+						        'id' => '[1-9][0-9]*',
+					        ),
+				        ),
+			        ),
+		        ),
+	        ),
 	        'settings' => array(
 		        'type' => 'Literal',
 		        'options' => array(
@@ -318,6 +355,7 @@ return array(
             'Juno\Controller\PointOfSale' => 'Juno\Controller\PointOfSaleController',
             'Juno\Controller\Product' => 'Juno\Controller\ProductController',
             'Juno\Controller\ProductType' => 'Juno\Controller\ProductTypeController',
+            'Juno\Controller\Sale' => 'Juno\Controller\SaleController',
         ),
 	    'factories' => array(
 		    'Juno\Controller\Auth' => 'Juno\Controller\AuthControllerFactory',
